@@ -36,7 +36,7 @@ export default async function LogPage() {
         <div className="rounded-[1.75rem] border border-stone-200/80 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)] p-6 shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500 shadow-sm">
+              <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
                 <Building2 className="size-3.5" strokeWidth={1.8} />
                 Property journal
               </div>
@@ -63,19 +63,19 @@ export default async function LogPage() {
           <div className="mt-6 grid grid-cols-3 gap-3">
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
-                <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">Entries</p>
+                <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Entries</p>
                 <p className="mt-2 text-2xl font-semibold text-stone-900">{logs.length}</p>
               </CardContent>
             </Card>
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
-                <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">Average</p>
+                <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Average</p>
                 <p className="mt-2 text-2xl font-semibold text-amber-600">{avgScore ?? '--'}</p>
               </CardContent>
             </Card>
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
-                <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">Liked</p>
+                <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Liked</p>
                 <p className="mt-2 text-2xl font-semibold text-emerald-600">{highScoreCount}</p>
               </CardContent>
             </Card>
@@ -96,7 +96,7 @@ export default async function LogPage() {
               <p className="text-sm font-semibold text-stone-900">鏡を見る</p>
               <p className="text-xs text-stone-500">積み上がったログから、本当の優先度を整理します</p>
             </div>
-            <div className="flex items-center gap-2 rounded-full bg-stone-900 px-3 py-1.5 text-xs font-medium text-white">
+            <div className="font-brand flex items-center gap-2 rounded-full bg-stone-900 px-3 py-1.5 text-xs font-medium text-white">
               <TrendingUp className="size-3.5" />
               Analyze
             </div>

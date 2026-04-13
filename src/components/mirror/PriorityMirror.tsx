@@ -89,7 +89,7 @@ function ReferenceImageCard() {
         />
       </div>
       <CardContent className="p-4">
-        <p className="text-sm font-semibold text-stone-900">Reference mood</p>
+        <p className="font-brand text-sm font-semibold text-stone-900">Reference mood</p>
         <p className="mt-1 text-sm leading-relaxed text-stone-500">
           余白があり、光がやわらかい空間は、今のログの好みとも相性がよさそうです。
         </p>
@@ -214,7 +214,7 @@ function AIAnalysisCard({
           <Card className="overflow-hidden border-amber-200 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
             <CardContent className="grid gap-5 p-6 sm:grid-cols-[1.1fr_0.9fr]">
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
+                <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
                   <Eye className="size-3.5" />
                   Your mirror
                 </div>
@@ -352,7 +352,7 @@ export function PriorityMirror({ logs, projectId, userId, latestAnalysis }: Prop
       <Card className="overflow-hidden">
         <CardContent className="grid gap-6 p-6 sm:grid-cols-[1fr_0.9fr] sm:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">
+            <div className="font-brand inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-700">
               <Sparkles className="size-3.5" />
               Mirror waiting
             </div>
@@ -378,7 +378,7 @@ export function PriorityMirror({ logs, projectId, userId, latestAnalysis }: Prop
       <Card className="overflow-hidden border-stone-200/80 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
         <CardContent className="grid gap-5 p-6 sm:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
+            <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
               <Sparkles className="size-3.5 text-amber-500" />
               Preference mirror
             </div>
@@ -395,19 +395,19 @@ export function PriorityMirror({ logs, projectId, userId, latestAnalysis }: Prop
             <div className="grid grid-cols-3 gap-3">
               <Card className="border-stone-200/70 shadow-none">
                 <CardContent className="p-4 text-center">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-stone-400">Entries</p>
+                  <p className="font-brand text-[11px] uppercase tracking-[0.14em] text-stone-400">Entries</p>
                   <p className="mt-2 text-2xl font-semibold text-stone-900">{logs.length}</p>
                 </CardContent>
               </Card>
               <Card className="border-stone-200/70 shadow-none">
                 <CardContent className="p-4 text-center">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-stone-400">Average</p>
+                  <p className="font-brand text-[11px] uppercase tracking-[0.14em] text-stone-400">Average</p>
                   <p className="mt-2 text-2xl font-semibold text-amber-600">{avgScore}</p>
                 </CardContent>
               </Card>
               <Card className="border-stone-200/70 shadow-none">
                 <CardContent className="p-4 text-center">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-stone-400">Liked</p>
+                  <p className="font-brand text-[11px] uppercase tracking-[0.14em] text-stone-400">Liked</p>
                   <p className="mt-2 text-2xl font-semibold text-emerald-600">{highScoreCount}</p>
                 </CardContent>
               </Card>

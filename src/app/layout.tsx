@@ -8,6 +8,26 @@ const geistSans = localFont({
   weight: '100 900',
 })
 
+const zenKakuGothic = localFont({
+  src: [
+    { path: './fonts/ZenKakuGothicNew-400.ttf', weight: '400', style: 'normal' },
+    { path: './fonts/ZenKakuGothicNew-500.ttf', weight: '500', style: 'normal' },
+    { path: './fonts/ZenKakuGothicNew-700.ttf', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-zen-kaku',
+  display: 'swap',
+})
+
+const manrope = localFont({
+  src: [
+    { path: './fonts/Manrope-400.ttf', weight: '400', style: 'normal' },
+    { path: './fonts/Manrope-700.ttf', weight: '700', style: 'normal' },
+    { path: './fonts/Manrope-800.ttf', weight: '800', style: 'normal' },
+  ],
+  variable: '--font-manrope',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   title: 'SUMAI MIRROR',
   description: '家探しの「好み」を言語化するアプリ',
@@ -22,7 +42,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja" className={geistSans.variable}>
+    <html lang="ja" className={`${geistSans.variable} ${zenKakuGothic.variable} ${manrope.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   )

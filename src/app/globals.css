@@ -24,8 +24,9 @@
   --color-ring:                 var(--ring);
 
   /* Fonts */
-  --font-serif: 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', Georgia, serif;
-  --font-sans:  var(--font-geist-sans), 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-zen-kaku), 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:  var(--font-zen-kaku), var(--font-geist-sans), 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
+  --font-brand: var(--font-manrope), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono:  var(--font-geist-mono), ui-monospace, monospace;
 
   /* Radius */
@@ -38,6 +39,10 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .font-heading { font-family: var(--font-serif); }
+  .font-brand {
+    font-family: var(--font-brand);
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 @layer base {

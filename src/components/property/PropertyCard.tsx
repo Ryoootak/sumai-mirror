@@ -75,13 +75,13 @@ export function PropertyCard({ log }: PropertyCardProps) {
 
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">Overall score</p>
+              <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Overall score</p>
               <div className="mt-1">
                 <Stars score={log.score} />
               </div>
             </div>
             <div className="rounded-2xl bg-amber-50 px-3 py-2 text-right">
-              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-amber-700/70">Score</p>
+              <p className="font-brand text-[11px] font-medium uppercase tracking-[0.12em] text-amber-700/70">Score</p>
               <p className="text-lg font-semibold text-amber-700">{log.score}.0</p>
             </div>
           </div>
