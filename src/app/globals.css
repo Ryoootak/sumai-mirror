@@ -24,9 +24,9 @@
   --color-ring:                 var(--ring);
 
   /* Fonts */
-  --font-serif: var(--font-zen-kaku), 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
-  --font-sans:  var(--font-zen-kaku), var(--font-geist-sans), 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
-  --font-brand: var(--font-manrope), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-line-seed-jp), 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:  var(--font-line-seed-jp), var(--font-geist-sans), 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
+  --font-brand: var(--font-line-seed-jp), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono:  var(--font-geist-mono), ui-monospace, monospace;
 
   /* Radius */
