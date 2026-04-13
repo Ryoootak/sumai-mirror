@@ -66,7 +66,7 @@ export function PreferencesForm({ userId, initialPreferences }: PreferencesFormP
             onChange={(event) => handleChange(field.key, event.target.value)}
             placeholder={field.placeholder}
             rows={field.key === 'must_have' || field.key === 'avoid' ? 3 : 2}
-            className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
+            className="w-full rounded-2xl border border-stone-200 bg-stone-50/50 px-4 py-3 text-sm text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:bg-white focus:ring-3 focus:ring-amber-400/20"
           />
         </div>
       ))}
@@ -79,7 +79,7 @@ export function PreferencesForm({ userId, initialPreferences }: PreferencesFormP
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-full bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-full bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isPending ? '保存中...' : '条件を保存'}
         </button>

@@ -1,10 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { ArrowLeft, CalendarDays, ExternalLink, NotebookPen } from 'lucide-react'
 import type { PropertyLog, PartnerReaction } from '@/types'
 import { cn } from '@/lib/utils'
 import { DeleteLogButton } from '@/components/property/DeleteLogButton'
+import { Card, CardContent } from '@/components/ui/card'
 
 const PARTNER_LABEL: Record<PartnerReaction, { label: string; className: string }> = {
   great:   { label: '◎ すごくいい', className: 'bg-emerald-100 text-emerald-700' },
@@ -40,19 +41,38 @@ export default async function LogDetailPage({ params }: Props) {
 
   return (
     <div className="pb-28">
-      <header className="px-5 pt-12 pb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/log"
-              className="flex items-center justify-center w-9 h-9 rounded-full border border-stone-200 bg-white text-stone-500"
-            >
-              <ArrowLeft className="size-4" strokeWidth={1.5} />
-            </Link>
-            <span className="text-sm text-stone-400">{dateStr}</span>
-          </div>
-          <DeleteLogButton logId={log.id} />
-        </div>
+      <header className="px-5 pb-6 pt-10">
+        <Card className="overflow-hidden border-stone-200/80 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <Link
+                  href="/log"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500"
+                >
+                  <ArrowLeft className="size-4" strokeWidth={1.5} />
+                </Link>
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
+                    <NotebookPen className="size-3.5 text-amber-500" />
+                    Log detail
+                  </div>
+                  <h1
+                    className="mt-4 text-[1.75rem] font-bold text-stone-900"
+                    style={{ fontFamily: 'var(--font-serif)' }}
+                  >
+                    記録の詳細
+                  </h1>
+                  <div className="mt-2 inline-flex items-center gap-2 text-sm text-stone-500">
+                    <CalendarDays className="size-4" />
+                    {dateStr}
+                  </div>
+                </div>
+              </div>
+              <DeleteLogButton logId={log.id} />
+            </div>
+          </CardContent>
+        </Card>
       </header>
 
       <main className="px-5 space-y-4">

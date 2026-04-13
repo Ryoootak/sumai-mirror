@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Check } from 'lucide-react'
+import { Check, Link2 } from 'lucide-react'
 
 export function CopyInviteButton({ projectId }: { projectId: string }) {
   const [copied, setCopied] = useState(false)
@@ -16,9 +16,9 @@ export function CopyInviteButton({ projectId }: { projectId: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-amber-600 active:scale-95 transition-all"
+      className="inline-flex items-center gap-2 rounded-2xl bg-stone-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-stone-800 active:scale-95 transition-all"
     >
-      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+      {copied ? <Check className="size-4" /> : <Link2 className="size-4" />}
       {copied ? 'コピーしました！' : '招待リンクをコピー'}
     </button>
   )

@@ -1,9 +1,11 @@
 'use client'
 
 import { Suspense, useMemo, useState } from 'react'
+import { ArrowRight, LockKeyhole, Mail, ShieldCheck, UserRound } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
 
 function SignupPageContent() {
   const searchParams = useSearchParams()
@@ -62,9 +64,13 @@ function SignupPageContent() {
 
   return (
     <div className="w-full max-w-sm space-y-8">
-      <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 mb-2">
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 mb-2 shadow-sm">
           <span className="text-2xl">🏠</span>
+        </div>
+        <div className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+          <ShieldCheck className="size-3.5" />
+          Create account
         </div>
         <h1
           className="text-2xl font-bold tracking-tight text-stone-800"
@@ -78,36 +84,45 @@ function SignupPageContent() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1.5">
           <label className="block text-sm font-medium text-stone-700">お名前</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            placeholder="山田 太郎"
-            className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
-          />
+          <div className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3.5 transition focus-within:border-amber-400 focus-within:ring-3 focus-within:ring-amber-400/20">
+            <UserRound className="size-4 text-stone-400" />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              placeholder="山田 太郎"
+              className="w-full bg-transparent text-stone-800 placeholder:text-stone-300 outline-none"
+            />
+          </div>
         </div>
         <div className="space-y-1.5">
           <label className="block text-sm font-medium text-stone-700">メールアドレス</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="you@example.com"
-            className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
-          />
+          <div className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3.5 transition focus-within:border-amber-400 focus-within:ring-3 focus-within:ring-amber-400/20">
+            <Mail className="size-4 text-stone-400" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="you@example.com"
+              className="w-full bg-transparent text-stone-800 placeholder:text-stone-300 outline-none"
+            />
+          </div>
         </div>
         <div className="space-y-1.5">
           <label className="block text-sm font-medium text-stone-700">パスワード（8文字以上）</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="••••••••"
-            className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
-          />
+          <div className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3.5 transition focus-within:border-amber-400 focus-within:ring-3 focus-within:ring-amber-400/20">
+            <LockKeyhole className="size-4 text-stone-400" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
+              className="w-full bg-transparent text-stone-800 placeholder:text-stone-300 outline-none"
+            />
+          </div>
         </div>
 
         {error && (
@@ -116,13 +131,14 @@ function SignupPageContent() {
           </div>
         )}
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="w-full rounded-2xl bg-amber-500 px-6 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
+          className="h-12 w-full rounded-2xl bg-amber-500 text-base font-semibold text-white shadow-sm transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
         >
+          <ArrowRight className="size-4" />
           {loading ? '登録中...' : 'アカウントを作成'}
-        </button>
+        </Button>
       </form>
 
       <p className="text-center text-sm text-stone-500">

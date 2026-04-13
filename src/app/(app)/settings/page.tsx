@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { LogOut } from 'lucide-react'
+import { LogOut, Settings2 } from 'lucide-react'
 import { PreferencesForm } from '@/components/settings/PreferencesForm'
+import { Card, CardContent } from '@/components/ui/card'
 
 export default async function SettingsPage() {
   const supabase = createClient()
@@ -17,13 +18,21 @@ export default async function SettingsPage() {
 
   return (
     <div className="pb-28">
-      <header className="px-5 pt-12 pb-6">
-        <h1
-          className="text-2xl font-bold text-stone-800"
-          style={{ fontFamily: 'var(--font-serif)' }}
-        >
-          設定
-        </h1>
+      <header className="px-5 pb-6 pt-10">
+        <Card className="overflow-hidden border-stone-200/80 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
+          <CardContent className="p-6">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
+              <Settings2 className="size-3.5 text-amber-500" />
+              Profile settings
+            </div>
+            <h1
+              className="mt-4 text-[2rem] font-bold text-stone-900"
+              style={{ fontFamily: 'var(--font-serif)' }}
+            >
+              設定
+            </h1>
+          </CardContent>
+        </Card>
       </header>
 
       <main className="px-5 space-y-6">
