@@ -19,21 +19,21 @@ export async function getOrCreateProject(
   if (membership?.project_id) return membership.project_id
 
   // なければ作成
-  const { data: project, error } = await supabase
-    .from('projects')
-    .insert({ name: '家探し', status: 'active' })
-    .select('id')
-    .single()
+  const projectId = crypto.randomUUID()
 
-  if (error || !project) {
+  const { error } = await supabase
+    .from('projects')
+    .insert({ id: projectId, name: '家探し', status: 'active' })
+
+  if (error) {
     throw new Error('プロジェクトの作成に失敗しました: ' + (error?.message ?? 'unknown'))
   }
 
   await supabase.from('project_members').insert({
-    project_id: project.id,
+    project_id: projectId,
     user_id: userId,
     role: 'owner',
   })
 
-  return project.id
+  return projectId
 }
