@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/ryota.k/Documents/Dev/sumai-mirror/supabase/migrations)",
+      "Bash(mkdir -p /Users/ryota.k/Documents/Dev/sumai-mirror/src/lib/supabase)",
+      "Bash(mkdir -p /Users/ryota.k/Documents/Dev/sumai-mirror/src/types)",
+      "Bash(mkdir -p /Users/ryota.k/Documents/Dev/sumai-mirror/src/app/api/ogp)",
+      "Bash(mkdir -p /Users/ryota.k/Documents/Dev/sumai-mirror/src/app/api/analyze)",
+      "Bash(supabase --version)",
+      "Bash(brew install:*)",
+      "Bash(npx supabase:*)",
+      "Bash(curl -s 'https://ygqembqvfhdpiiknrlim.supabase.co/rest/v1/projects?select=id&limit=1' -H 'apikey: sb_publishable_fpXuNZQOHPZpbUBbdlnlrQ_-2bF8XNy' -H 'Authorization: Bearer sb_publishable_fpXuNZQOHPZpbUBbdlnlrQ_-2bF8XNy')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/projects/test-id/log/new)",
+      "Bash(curl -s -o /dev/null -w \"/ → %{http_code} | redirect: %{redirect_url}\\\\n\" -L http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"/login → %{http_code}\\\\n\" http://localhost:3000/login)",
+      "Bash(curl -s -o /dev/null -w \"/ → %{http_code}\\\\n\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"/dashboard → %{http_code}\\\\n\" http://localhost:3000/dashboard)"
+    ],
+    "additionalDirectories": [
+      "/Users/ryota.k/Documents/Dev/sumai-mirror/src/app/(app)/log"
+    ]
+  }
+}
