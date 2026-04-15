@@ -255,10 +255,7 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
     if (error) { setSubmitError(error.message); return }
 
     const dest = mode === 'edit' && initialData ? `/log/${initialData.id}` : '/log'
-    start(() => {
-      router.refresh()
-      router.push(dest)
-    })
+    window.location.href = dest
   }
 
   // タイプに応じたタグセット
