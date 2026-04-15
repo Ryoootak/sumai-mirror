@@ -169,7 +169,7 @@ export default async function LogPage() {
                     <span className="text-xs text-stone-400">{group.length}件</span>
                   </div>
                   <div className="space-y-2">
-                    {group.map((log) => <PropertyCard key={log.id} log={log} creatorName={log.users_profile?.name ?? null} currentUserId={user.id} />)}
+                    {group.map((log) => <PropertyCard key={log.id} log={log} currentUserId={user.id} />)}
                   </div>
                 </section>
               )
