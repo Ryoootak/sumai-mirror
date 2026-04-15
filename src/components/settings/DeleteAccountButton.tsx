@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 export function DeleteAccountButton() {
   const router = useRouter()
@@ -14,7 +15,14 @@ export function DeleteAccountButton() {
     setLoading(true)
     setError(null)
 
-    const res = await fetch('/api/account/delete', { method: 'DELETE' })
+    const supabase = createClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+
+    const res = await fetch('/api/account/delete', {
+      method: 'DELETE',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
 
     if (!res.ok) {
       const data = await res.json()
