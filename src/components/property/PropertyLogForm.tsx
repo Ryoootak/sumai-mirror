@@ -256,8 +256,8 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
 
     const dest = mode === 'edit' && initialData ? `/log/${initialData.id}` : '/log'
     start(() => {
-      router.push(dest)
       router.refresh()
+      router.push(dest)
     })
   }
 
