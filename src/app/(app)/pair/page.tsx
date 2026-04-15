@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getOrCreateProject } from '@/lib/project'
+import { getActiveProjectId } from '@/lib/active-project'
 import { Heart, Link2, Users } from 'lucide-react'
 import { CopyInviteButton } from '@/components/pair/CopyInviteButton'
 import { Card, CardContent } from '@/components/ui/card'
@@ -11,7 +11,8 @@ export default async function PairPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const projectId = await getOrCreateProject(supabase, user.id)
+  const projectId = await getActiveProjectId(supabase, user.id)
+  if (!projectId) redirect('/onboarding')
 
   // パートナーを取得
   const { data: members } = await supabase

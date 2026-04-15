@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, SquarePen } from 'lucide-react'
 import { PropertyLogForm } from '@/components/property/PropertyLogForm'
-import { getOrCreateProject } from '@/lib/project'
+import { getActiveProjectId } from '@/lib/active-project'
 import { Card, CardContent } from '@/components/ui/card'
 
 export default async function NewLogPage() {
@@ -11,7 +11,8 @@ export default async function NewLogPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const projectId = await getOrCreateProject(supabase, user.id)
+  const projectId = await getActiveProjectId(supabase, user.id)
+  if (!projectId) redirect('/onboarding')
 
   return (
     <div className="pb-28">

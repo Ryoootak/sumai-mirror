@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Sparkles } from 'lucide-react'
-import { getOrCreateProject } from '@/lib/project'
+import { getActiveProjectId } from '@/lib/active-project'
 import { PriorityMirror } from '@/components/mirror/PriorityMirror'
 import { Card, CardContent } from '@/components/ui/card'
 import type { PropertyLog } from '@/types'
@@ -12,7 +12,8 @@ export default async function MirrorPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const projectId = await getOrCreateProject(supabase, user.id)
+  const projectId = await getActiveProjectId(supabase, user.id)
+  if (!projectId) redirect('/onboarding')
 
   // 自分のログ
   const { data: logsRaw } = await supabase

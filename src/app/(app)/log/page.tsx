@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 import { PropertyCard } from '@/components/property/PropertyCard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { getOrCreateProject } from '@/lib/project'
+import { getActiveProjectId } from '@/lib/active-project'
 import { createClient } from '@/lib/supabase/server'
 import type { PropertyLog } from '@/types'
 
@@ -23,7 +23,8 @@ export default async function LogPage() {
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const projectId = await getOrCreateProject(supabase, user.id)
+  const projectId = await getActiveProjectId(supabase, user.id)
+  if (!projectId) redirect('/onboarding')
 
   const { data: logsRaw } = await supabase
     .from('property_logs')

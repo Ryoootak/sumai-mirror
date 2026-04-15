@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Pencil } from 'lucide-react'
 import { PropertyLogForm } from '@/components/property/PropertyLogForm'
-import { getOrCreateProject } from '@/lib/project'
+import { getActiveProjectId } from '@/lib/active-project'
 import { Card, CardContent } from '@/components/ui/card'
 import type { PropertyLog } from '@/types'
 
@@ -26,7 +26,8 @@ export default async function EditLogPage({ params }: Props) {
   if (!logRaw) notFound()
   const log = logRaw as PropertyLog
 
-  const projectId = await getOrCreateProject(supabase, user.id)
+  const projectId = await getActiveProjectId(supabase, user.id)
+  if (!projectId) redirect('/onboarding')
 
   return (
     <div className="pb-28">

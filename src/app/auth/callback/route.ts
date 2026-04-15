@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
-import { getOrCreateProject } from '@/lib/project'
 import { sanitizeAuthRedirectPath } from '@/lib/auth-redirect'
 
 export async function GET(request: NextRequest) {
@@ -28,11 +27,6 @@ export async function GET(request: NextRequest) {
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      // 自動でプロジェクトを作成（なければ）
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await getOrCreateProject(supabase, user.id).catch(() => {})
-      }
       return response
     }
   }

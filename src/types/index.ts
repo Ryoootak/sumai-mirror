@@ -13,6 +13,7 @@ export interface UserProfile {
   id: string
   name: string | null
   preferences: Record<string, unknown>
+  active_project_id: string | null
   created_at: string
 }
 

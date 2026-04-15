@@ -31,10 +31,30 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const matchesRoute = (route: string) =>
     pathname === route || pathname.startsWith(`${route}/`)
+  const isOnboardingRoute = matchesRoute('/onboarding')
+
+  let activeProjectId: string | null = null
+  if (user) {
+    const { data: profile } = await supabase
+      .from('users_profile')
+      .select('active_project_id')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    activeProjectId = profile?.active_project_id ?? null
+  }
 
   // Auth routes → ログイン済みならアプリへ
   const isAuthRoute = matchesRoute('/login') || matchesRoute('/signup')
   if (isAuthRoute && user) {
+    return NextResponse.redirect(new URL(activeProjectId ? '/log' : '/onboarding', request.url))
+  }
+
+  if (isOnboardingRoute && !user) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  if (isOnboardingRoute && user && activeProjectId) {
     return NextResponse.redirect(new URL('/log', request.url))
   }
 
@@ -48,6 +68,10 @@ export async function middleware(request: NextRequest) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('next', sanitizeAuthRedirectPath(pathname))
     return NextResponse.redirect(loginUrl)
+  }
+
+  if (isAppRoute && user && !activeProjectId) {
+    return NextResponse.redirect(new URL('/onboarding', request.url))
   }
 
   return supabaseResponse
