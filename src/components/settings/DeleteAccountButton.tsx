@@ -17,13 +17,12 @@ export function DeleteAccountButton() {
 
     try {
       const result = await deleteAccount()
+      // redirect() が Server Action 内で呼ばれた場合 result は undefined になる
       if (result?.error) {
         setError(result.error)
         setLoading(false)
-        return
       }
-      router.push('/login')
-      router.refresh()
+      // 成功時は Server Action 内の redirect('/login') が画面遷移を行う
     } catch {
       setError('削除に失敗しました')
       setLoading(false)
