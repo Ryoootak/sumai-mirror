@@ -6,16 +6,6 @@ import { LogOut, Settings2 } from 'lucide-react'
 import { PreferencesForm } from '@/components/settings/PreferencesForm'
 import { DeleteAccountButton } from '@/components/settings/DeleteAccountButton'
 import { Card, CardContent } from '@/components/ui/card'
-import crypto from 'crypto'
-
-function generateDeleteToken(userId: string): string {
-  const timestamp = Math.floor(Date.now() / 60000)
-  const signature = crypto
-    .createHmac('sha256', process.env.SUPABASE_SERVICE_ROLE_KEY!)
-    .update(`${userId}:${timestamp}`)
-    .digest('hex')
-  return `${userId}:${timestamp}:${signature}`
-}
 
 export default async function SettingsPage() {
   const supabase = createClient()
@@ -87,10 +77,7 @@ export default async function SettingsPage() {
             <LogOut className="size-4" strokeWidth={1.5} />
             <span className="font-medium">ログアウト</span>
           </Link>
-          <DeleteAccountButton
-            deleteToken={generateDeleteToken(user.id)}
-            email={user.email ?? ''}
-          />
+          <DeleteAccountButton email={user.email ?? ''} />
         </section>
       </main>
     </div>

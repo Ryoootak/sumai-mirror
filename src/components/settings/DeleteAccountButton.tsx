@@ -4,13 +4,7 @@ import { useState } from 'react'
 import { LockKeyhole, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
-export function DeleteAccountButton({
-  deleteToken,
-  email,
-}: {
-  deleteToken: string
-  email: string
-}) {
+export function DeleteAccountButton({ email }: { email: string }) {
   const [open, setOpen] = useState(false)
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -32,24 +26,23 @@ export function DeleteAccountButton({
     setError(null)
 
     try {
-      // パスワードを検証
+      // パスワードを検証 → 成功すると新しいセッションがブラウザに生まれる
       const supabase = createClient()
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
-      if (authError) {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+      if (authError || !data.session) {
         setError('パスワードが正しくありません')
         return
       }
 
-      // 削除実行
+      // 取得したアクセストークンをそのまま送信
       const res = await fetch('/api/account/delete', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: deleteToken }),
+        headers: { Authorization: `Bearer ${data.session.access_token}` },
       })
-      const data = await res.json().catch(() => ({}))
+      const result = await res.json().catch(() => ({}))
 
       if (!res.ok) {
-        setError(data.error ?? '削除に失敗しました')
+        setError(result.error ?? '削除に失敗しました')
         return
       }
 
