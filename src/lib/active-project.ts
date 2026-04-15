@@ -118,7 +118,7 @@ export async function ensureProjectMembership(
         user_id: userId,
         role,
       },
-      { onConflict: 'project_id,user_id' }
+      { onConflict: 'project_id,user_id', ignoreDuplicates: true }
     )
 
   if (error) {
