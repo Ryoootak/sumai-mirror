@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import type { OgpData, PropertyLog, PropertyLogFormData, PropertyType } from '@/types'
 
+type AutofillFieldStatus = 'idle' | 'filled' | 'missing'
+
 // ── タグ定義 ───────────────────────────────────────────────
 
 const TAGS_GOOD_COMMON = [
@@ -189,6 +191,11 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
   )
   const [submitError, setSubmitError] = useState<string | null>(null)
   const { fetch_, loading: ogpLoading, error: ogpError } = useOgp()
+  const [autofillAttempted, setAutofillAttempted] = useState(false)
+  const [autofillStatus, setAutofillStatus] = useState<{ title: AutofillFieldStatus; price: AutofillFieldStatus }>({
+    title: 'idle',
+    price: 'idle',
+  })
 
   const set = <K extends keyof PropertyLogFormData>(k: K, v: PropertyLogFormData[K]) =>
     setForm((p) => ({ ...p, [k]: v }))
@@ -200,11 +207,21 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
 
   const handleUrlBlur = async () => {
     if (!form.url) return
+    setAutofillAttempted(true)
     const data = await fetch_(form.url)
-    if (data) {
-      if (data.title && !form.title) set('title', data.title)
-      if (data.price && !form.price) set('price', data.price)
+    if (!data) {
+      setAutofillStatus({ title: 'missing', price: 'missing' })
+      return
     }
+
+    const nextStatus: { title: AutofillFieldStatus; price: AutofillFieldStatus } = {
+      title: data.title ? 'filled' : 'missing',
+      price: data.price ? 'filled' : 'missing',
+    }
+
+    if (data.title && !form.title) set('title', data.title)
+    if (data.price && !form.price) set('price', data.price)
+    setAutofillStatus(nextStatus)
   }
 
   const addCustomTag = (field: 'tags_good' | 'tags_bad', value: string) => {
@@ -289,7 +306,7 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
       {/* URL */}
       <section className="space-y-3">
         <label className="block text-sm font-semibold text-stone-700">
-          物件URL <span className="font-normal text-stone-400">（貼るだけで自動入力）</span>
+          物件URL <span className="font-normal text-stone-400">（公開メタ情報から自動入力）</span>
         </label>
         <input
           type="url"
@@ -299,8 +316,23 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
           placeholder="https://suumo.jp/..."
           className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
         />
-        {ogpLoading && <p className="text-sm text-amber-600">⏳ 物件情報を取得中...</p>}
-        {ogpError && <p className="text-sm text-stone-400">{ogpError}</p>}
+        <div className="space-y-2">
+          <p className="text-xs leading-6 text-stone-400">
+            URLを入れると、物件名や価格などの公開メタ情報を確認します。サイトによっては価格を自動入力できない場合があります。
+          </p>
+          {ogpLoading && <p className="text-sm text-amber-600">物件情報を確認しています...</p>}
+          {ogpError && <p className="text-sm text-stone-400">{ogpError}</p>}
+          {autofillAttempted && !ogpLoading && !ogpError && (
+            <div className="rounded-2xl border border-stone-200 bg-stone-50/80 px-4 py-3 text-sm text-stone-600">
+              <p className={cn('leading-6', autofillStatus.title === 'filled' && 'text-emerald-700')}>
+                {autofillStatus.title === 'filled' ? '物件名を自動入力しました。' : '物件名は自動入力できなかったため、必要なら手入力してください。'}
+              </p>
+              <p className={cn('mt-1 leading-6', autofillStatus.price === 'filled' && 'text-emerald-700')}>
+                {autofillStatus.price === 'filled' ? '価格を自動入力しました。' : '価格は公開メタ情報から取得できませんでした。手入力してください。'}
+              </p>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Title & Price */}
@@ -314,6 +346,7 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
             placeholder="〇〇マンション 3LDK"
             className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
           />
+          {autofillStatus.title === 'filled' && <p className="text-xs text-emerald-700">URLから入力しました</p>}
         </div>
         <div className="space-y-1.5">
           <label className="block text-sm font-semibold text-stone-700">価格</label>
@@ -324,6 +357,8 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
             placeholder="4,500万円"
             className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
           />
+          {autofillStatus.price === 'filled' && <p className="text-xs text-emerald-700">URLから入力しました</p>}
+          {autofillStatus.price === 'missing' && <p className="text-xs text-stone-400">価格は自動入力できないことがあります</p>}
         </div>
       </section>
 
@@ -419,7 +454,7 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
         disabled={isPending || ogpLoading}
         className="w-full rounded-2xl bg-amber-500 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
       >
-        {isPending ? '保存中...' : mode === 'edit' ? '保存する' : '記録する'}
+        {isPending ? '保存中...' : mode === 'edit' ? '保存する' : '候補を追加する'}
       </button>
     </form>
   )

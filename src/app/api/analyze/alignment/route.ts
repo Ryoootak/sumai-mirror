@@ -56,19 +56,19 @@ export async function POST(req: NextRequest) {
   const partnerLogs = allLogs.filter((l) => l.user_id === partnerId)
 
   if (myLogs.length < 5 || partnerLogs.length < 5) {
-    return NextResponse.json({ error: '二人それぞれ5件以上のログが必要です' }, { status: 422 })
+    return NextResponse.json({ error: '二人それぞれ5件以上の候補が必要です' }, { status: 422 })
   }
 
   const myLogsText = formatLogs(myLogs, '私の')
   const partnerLogsText = formatLogs(partnerLogs, 'パートナーの')
 
-  const prompt = `二人で家探しをしているカップルの記録を分析してください。
-同じプロジェクトで記録した二人の評価を比較し、「合っている点」と「ズレている点」を整理します。
+  const prompt = `二人で家探しをしているカップルの物件候補を分析してください。
+同じプロジェクトで追加した二人の評価を比較し、「合っている点」と「ズレている点」を整理します。
 
-## 私の記録
+## 私の候補
 ${myLogsText}
 
-## パートナーの記録
+## パートナーの候補
 ${partnerLogsText}
 
 ## 分析の視点（必ず守ること）

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Building2, Plus, Sparkles, TrendingUp } from 'lucide-react'
 import { redirect } from 'next/navigation'
 
+import { CandidatesGuide } from '@/components/onboarding/CandidatesGuide'
 import { PropertyCard } from '@/components/property/PropertyCard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -64,17 +65,17 @@ export default async function LogPage() {
             <div className="space-y-3">
               <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
                 <Building2 className="size-3.5" strokeWidth={1.8} />
-                Property journal
+                Property candidates
               </div>
               <div>
                 <h1
                   className="text-[2rem] font-bold text-stone-900"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
-                  物件ログ
+                  物件候補
                 </h1>
-                <p className="mt-2 max-w-[200px] text-sm leading-7 text-stone-500">
-                  気になった物件を静かに積み上げて、二人の判断材料を整えていきます。
+                <p className="mt-2 max-w-[240px] text-sm leading-7 text-stone-500">
+                  気になる物件を一覧で整理できます。あとから比較しやすいように、先に候補をためていきましょう。
                 </p>
               </div>
             </div>
@@ -83,19 +84,19 @@ export default async function LogPage() {
           <div className="mt-6 grid grid-cols-3 gap-3">
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
-                <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Entries</p>
+                <p className="text-[11px] font-medium tracking-[0.08em] text-stone-400">候補数</p>
                 <p className="mt-2 text-2xl font-semibold text-stone-900">{logs.length}</p>
               </CardContent>
             </Card>
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
-                <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Average</p>
+                <p className="text-[11px] font-medium tracking-[0.08em] text-stone-400">平均評価</p>
                 <p className="mt-2 text-2xl font-semibold text-amber-600">{avgScore ?? '--'}</p>
               </CardContent>
             </Card>
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
-                <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Liked</p>
+                <p className="text-[11px] font-medium tracking-[0.08em] text-stone-400">最高評価</p>
                 <p className="mt-2 text-2xl font-semibold text-emerald-600">{highScoreCount}</p>
               </CardContent>
             </Card>
@@ -103,40 +104,47 @@ export default async function LogPage() {
         </div>
       </header>
 
-      {logs.length >= 5 && (
+      {logs.length >= 1 && (
         <div className="mb-5 px-5">
           <Link
             href="/mirror"
+            id="mirror-entry-guide"
             className="flex items-center gap-4 rounded-[1.5rem] border border-stone-200 bg-white px-5 py-4 shadow-sm transition hover:border-amber-200 hover:shadow-md"
           >
             <div className="rounded-2xl bg-amber-50 p-3 text-amber-600">
               <Sparkles className="size-5 shrink-0" strokeWidth={1.7} />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-stone-900">鏡を見る</p>
-              <p className="text-xs text-stone-500">積み上がったログから、本当の優先度を整理します</p>
+              <p className="text-sm font-semibold text-stone-900">鏡 | 好みの分析</p>
+              <p className="text-xs text-stone-500">
+                {logs.length >= 5
+                  ? '候補から、重視している条件や二人の違いを整理できます'
+                  : `候補の見え方は今すぐ確認できます。あと${5 - logs.length}件でAI分析も使えます`}
+              </p>
             </div>
             <div className="font-brand flex items-center gap-2 rounded-full bg-stone-900 px-3 py-1.5 text-xs font-medium text-white">
               <TrendingUp className="size-3.5" />
-              Analyze
+              Open
             </div>
           </Link>
         </div>
       )}
 
       <main className="px-5 space-y-8">
+        <CandidatesGuide logCount={logs.length} />
+
         {logs.length === 0 ? (
           <Card className="overflow-hidden border-stone-200/70">
             <CardHeader className="space-y-3">
-              <CardTitle style={{ fontFamily: 'var(--font-serif)' }}>まだ記録がありません</CardTitle>
+              <CardTitle style={{ fontFamily: 'var(--font-serif)' }}>まだ候補がありません</CardTitle>
               <CardDescription>
-                気になった物件をひとつずつ残していくと、あとから迷いにくくなります。
+                まずは気になる物件を1件だけ追加してみましょう。あとから比較しやすくなります。
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
               <div className="rounded-[1.25rem] bg-[linear-gradient(180deg,#fffaf5_0%,#fff 100%)] p-6">
                 <div className="mx-auto max-w-xs">
-                  <svg viewBox="0 0 320 220" className="h-auto w-full" role="img" aria-label="記録を始めるイラスト">
+                  <svg viewBox="0 0 320 220" className="h-auto w-full" role="img" aria-label="物件候補を追加するイラスト">
                     <rect x="26" y="34" width="268" height="152" rx="24" fill="#FFF6EC" />
                     <rect x="64" y="64" width="86" height="92" rx="16" fill="#F2D2AA" />
                     <path d="M81 117L106 83L132 117H81Z" fill="#D97706" />
@@ -149,9 +157,9 @@ export default async function LogPage() {
                 </div>
               </div>
               <Link href="/log/new" className="inline-flex">
-                <Button className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
+                <Button id="candidate-create-primary" className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
                   <Plus className="size-4" />
-                  最初の物件を記録する
+                  最初の物件候補を追加する
                 </Button>
               </Link>
             </CardContent>
@@ -193,7 +201,7 @@ export default async function LogPage() {
               <section>
                 <div className="mb-1 border-t border-stone-100 pt-6">
                   <p className="text-[13px] font-semibold text-stone-700">パートナーに確認してもらおう</p>
-                  <p className="mt-0.5 text-xs text-stone-400">パートナーがまだスコアを入力していない物件です</p>
+                  <p className="mt-0.5 text-xs text-stone-400">パートナーがまだ反応を入れていない候補です</p>
                 </div>
                 <div className="mt-3 space-y-2">
                   {awaitingPartner.map((log) => <PropertyCard key={log.id} log={log} currentUserId={user.id} />)}
@@ -207,13 +215,13 @@ export default async function LogPage() {
           <Card className="border-amber-200 bg-amber-50/70">
             <CardContent className="flex items-center justify-between gap-4 p-4">
               <div>
-                <p className="text-sm font-semibold text-amber-900">鏡の準備が進んでいます</p>
+                <p className="text-sm font-semibold text-amber-900">鏡の分析が育っています</p>
                 <p className="text-sm text-amber-800/80">
-                  あと<span className="font-bold">{5 - logs.length}件</span>で、優先度の分析が使えます。
+                  候補の見え方は今すぐ確認できます。あと<span className="font-bold">{5 - logs.length}件</span>でAI分析も使えます。
                 </p>
               </div>
               <div className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-amber-700 shadow-sm">
-                Soon
+                Growing
               </div>
             </CardContent>
           </Card>
@@ -223,10 +231,11 @@ export default async function LogPage() {
       <div className="fixed bottom-20 right-4">
         <Link
           href="/log/new"
+          id="candidate-create-fab"
           className="flex h-11 items-center gap-1.5 rounded-xl bg-stone-900 px-4 text-sm font-semibold text-white shadow-lg transition-all hover:bg-stone-800 active:scale-95"
         >
           <Plus className="size-4" strokeWidth={2} />
-          記録する
+          候補を追加
         </Link>
       </div>
     </div>

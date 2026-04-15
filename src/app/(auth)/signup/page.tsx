@@ -69,7 +69,7 @@ function SignupPageContent() {
             </h2>
             <p className="mx-auto max-w-[15rem] text-[13px] leading-relaxed text-stone-500 sm:max-w-xs sm:text-sm">
               <span className="font-medium text-stone-700">{email}</span> に届いたリンクを開くと、
-              すぐに記録を始められます。
+              すぐに物件候補を追加し始められます。
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@ function SignupPageContent() {
               SUMAI MIRROR
             </h1>
             <p className="mx-auto max-w-[15rem] text-[13px] leading-relaxed text-stone-500 sm:max-w-xs sm:text-sm">
-              二人の家探しを、静かに整った記録から始めましょう。
+              物件候補を整理して、重視している条件を見つけやすくします。あとから共有もできます。
             </p>
           </div>
         </div>

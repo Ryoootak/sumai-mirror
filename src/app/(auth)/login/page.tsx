@@ -50,7 +50,7 @@ function LoginPageContent() {
           </div>
           <div className="relative mt-3 space-y-1.5 sm:mt-4 sm:space-y-2">
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700/80 sm:text-[11px] sm:tracking-[0.24em]">
-              Property journal
+              Property candidates
             </p>
             <h1
               className="text-[1.85rem] font-bold tracking-tight text-stone-800 sm:text-3xl"
@@ -59,7 +59,7 @@ function LoginPageContent() {
               SUMAI MIRROR
             </h1>
             <p className="mx-auto max-w-[15rem] text-[13px] leading-relaxed text-stone-500 sm:max-w-xs sm:text-sm">
-              家探しの記録を静かに整えて、二人の判断材料を気持ちよく残せます。
+              気になる物件候補を整理して、重視している条件を見つけやすくします。一人でも、あとから共有でも使えます。
             </p>
           </div>
         </div>

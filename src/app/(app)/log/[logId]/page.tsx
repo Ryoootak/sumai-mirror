@@ -36,7 +36,7 @@ export default async function LogDetailPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // プロジェクトメンバーであれば自分以外のログも閲覧可（RLSが担保）
+  // プロジェクトメンバーであれば自分以外の候補も閲覧可（RLSが担保）
   const { data: logRaw } = await supabase
     .from('property_logs')
     .select('*, users_profile(name)')
@@ -69,13 +69,13 @@ export default async function LogDetailPage({ params }: Props) {
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
                     <NotebookPen className="size-3.5 text-amber-500" />
-                    {isMyLog ? 'My log' : `${creatorName}'s log`}
+                    {isMyLog ? 'My candidate' : `${creatorName}'s candidate`}
                   </div>
                   <h1
                     className="mt-4 text-[1.75rem] font-bold text-stone-900"
                     style={{ fontFamily: 'var(--font-serif)' }}
                   >
-                    記録の詳細
+                    物件候補の詳細
                   </h1>
                   <div className="mt-2 inline-flex items-center gap-2 text-sm text-stone-500">
                     <CalendarDays className="size-4" />

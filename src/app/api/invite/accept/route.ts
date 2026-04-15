@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (mode !== 'switch_active' && mode !== 'merge_logs') {
-      return NextResponse.json({ error: '現在の記録をどう扱うか選択してください' }, { status: 409 })
+      return NextResponse.json({ error: '現在の候補をどう扱うか選択してください' }, { status: 409 })
     }
 
     if (mode === 'merge_logs') {

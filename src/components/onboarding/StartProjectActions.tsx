@@ -29,7 +29,7 @@ export function StartProjectActions() {
         return
       }
 
-      router.push(mode === 'pair' ? '/pair' : '/log')
+      router.push('/log')
       router.refresh()
     })
   }
@@ -44,7 +44,7 @@ export function StartProjectActions() {
       >
         <span className="flex items-center gap-3">
           <Users className="size-4" />
-          {pendingMode === 'pair' ? 'ペア用の環境を作成中...' : 'ペアを作る'}
+          {pendingMode === 'pair' ? '共有用の候補一覧を準備中...' : 'パートナーと共有して始める'}
         </span>
         <ArrowRight className="size-4" />
       </Button>
@@ -58,7 +58,7 @@ export function StartProjectActions() {
       >
         <span className="flex items-center gap-3">
           <Link2 className="size-4" />
-          {pendingMode === 'solo' ? 'ひとり用の環境を作成中...' : 'ひとりで始める'}
+          {pendingMode === 'solo' ? '候補一覧を準備中...' : 'ひとりで始める'}
         </span>
         <ArrowRight className="size-4" />
       </Button>

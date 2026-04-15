@@ -29,15 +29,15 @@ export default async function NewLogPage() {
               <div className="flex-1">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
                   <SquarePen className="size-3.5 text-amber-500" />
-                  New entry
+                  New candidate
                 </div>
                 <h1
                   className="mt-4 text-[1.75rem] font-bold text-stone-900"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
-                  物件を記録する
+                  物件候補を追加する
                 </h1>
-                <p className="mt-2 text-sm leading-7 text-stone-500">気になったポイントを、あとから比較しやすい形で残します。</p>
+                <p className="mt-2 text-sm leading-7 text-stone-500">URLを貼ると物件名などを自動入力できます。足りない項目だけ手で補ってください。</p>
               </div>
             </div>
           </CardContent>

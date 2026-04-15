@@ -49,7 +49,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                 ペア招待が届いています
               </h1>
               <p className="mt-3 text-sm leading-7 text-stone-500">
-                同じ物件ログと分析を見ながら、二人で判断材料を共有できます。
+                同じ物件候補を見ながら、二人で判断材料をそろえられます。
               </p>
             </CardContent>
           </Card>
@@ -59,10 +59,10 @@ export default async function InvitePage({ params }: InvitePageProps) {
               <CardContent className="space-y-3 p-6 text-center">
                 <p className="text-sm font-medium text-emerald-600">このペアにはすでに参加済みです。</p>
                 <Link
-                  href="/pair"
+                  href="/log"
                   className="inline-flex items-center justify-center rounded-2xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600"
                 >
-                  ペア画面を開く
+                  物件候補を開く
                 </Link>
               </CardContent>
             </Card>
@@ -72,7 +72,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                 <div className="space-y-2">
                   <h2 className="text-lg font-semibold text-stone-900">今の環境をどう扱いますか？</h2>
                   <p className="text-sm leading-7 text-stone-500">
-                    すでに別の環境を使っています。参加前に、現在の記録をどうするか選んでください。
+                    すでに別の環境を使っています。参加前に、現在の候補をどうするか選んでください。
                   </p>
                 </div>
 
@@ -110,15 +110,15 @@ export default async function InvitePage({ params }: InvitePageProps) {
                       </div>
                       <div className="flex-1 space-y-2">
                         <div>
-                          <h3 className="text-sm font-semibold text-stone-900">自分の記録を相手の環境へ移す</h3>
+                          <h3 className="text-sm font-semibold text-stone-900">自分の候補を相手の環境へ移す</h3>
                           <p className="mt-1 text-sm leading-6 text-stone-500">
-                            自分のログを相手の環境へ移し、分析は最新状態で再生成しやすいように消去します。
+                            自分の物件候補を相手の環境へ移し、分析は最新状態で再生成しやすいように消去します。
                           </p>
                         </div>
                         <AcceptInviteButton
                           projectId={params.projectId}
                           mode="merge_logs"
-                          label="記録を移して参加する"
+                          label="候補を移して参加する"
                         />
                       </div>
                     </div>
@@ -130,7 +130,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
             <Card>
               <CardContent className="space-y-4 p-6 text-center">
                 <p className="text-sm leading-7 text-stone-500">
-                  この招待を受けると、以後は同じ環境で物件ログと分析を共有できます。
+                  この招待を受けると、以後は同じ環境で物件候補と分析を共有できます。
                 </p>
                 <AcceptInviteButton projectId={params.projectId} />
               </CardContent>

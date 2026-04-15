@@ -224,19 +224,95 @@ function Mirror1Card({
   const tagFreq = computeTagFrequency(logs)
   const badFreq = computeBadFrequency(logs)
 
-  if (logCount < 5) {
+  if (logCount === 0) {
     return (
       <Card className="overflow-hidden border-amber-100 bg-amber-50/40">
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="size-4 text-amber-400" strokeWidth={1.5} />
-            <span className="text-sm font-semibold text-stone-700">鏡1 — 優先度の鏡</span>
+            <span className="text-sm font-semibold text-stone-700">鏡1 — 候補の見え方</span>
           </div>
           <p className="text-sm text-stone-500">
-            あと<span className="font-bold text-amber-600">{5 - logCount}件</span>記録すると解放されます
+            候補を1件追加すると、よく見ている条件の並び方を確認できます。
           </p>
         </CardContent>
       </Card>
+    )
+  }
+
+  if (logCount < 5 && !result) {
+    return (
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Sparkles className="size-4 text-amber-500" strokeWidth={1.5} />
+          <h2 className="text-base font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
+            鏡1 — 候補の見え方
+          </h2>
+        </div>
+
+        <Card className="border-amber-200 bg-[linear-gradient(180deg,#fffaf5_0%,#fff_100%)]">
+          <CardContent className="grid gap-5 p-6 sm:grid-cols-[1fr_0.8fr] sm:items-center">
+            <div className="space-y-3">
+              <p className="text-sm leading-7 text-stone-600">
+                今ある候補から、よく選んでいる条件や気になりやすい点を先に見られます。
+                <span className="font-semibold text-amber-700">あと{5 - logCount}件</span>たまると、AIが傾向をまとめます。
+              </p>
+              <div className="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-xs font-medium text-amber-700 shadow-sm">
+                候補の可視化は利用中
+              </div>
+            </div>
+            <MirrorIllustration />
+          </CardContent>
+        </Card>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="size-4 text-amber-600" />
+                よく選んでいる条件
+              </CardTitle>
+              <CardDescription>評価が高かった候補でよく出ているポイントです。</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {tagFreq.length > 0 ? tagFreq.map((item, i) => (
+                <div key={item.tag} className="space-y-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-50 text-xs font-semibold text-amber-700">{i + 1}</span>
+                      <span className="text-sm font-medium text-stone-800">{item.tag}</span>
+                    </div>
+                    <span className="text-xs font-semibold text-stone-500">{item.rate}%</span>
+                  </div>
+                  <Progress value={item.rate} />
+                </div>
+              )) : (
+                <p className="text-sm leading-7 text-stone-500">評価が高い候補にタグを付けると、ここに共通点が並びます。</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ChartColumnBig className="size-4 text-stone-700" />
+                気になりやすい点
+              </CardTitle>
+              <CardDescription>評価が低めだった候補で繰り返し出ているポイントです。</CardDescription>
+            </CardHeader>
+            <CardContent className="flex min-h-32 flex-wrap gap-2">
+              {badFreq.length > 0 ? badFreq.map((item) => (
+                <span key={item.tag} className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-sm font-medium text-rose-700">
+                  {item.tag}
+                  <span className="text-xs font-bold text-rose-400">{item.count}</span>
+                </span>
+              )) : (
+                <p className="text-sm leading-7 text-stone-500">気になった点にタグを付けると、ここで傾向を見返せます。</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </section>
     )
   }
 
@@ -245,7 +321,7 @@ function Mirror1Card({
       <div className="flex items-center gap-2">
         <Sparkles className="size-4 text-amber-500" strokeWidth={1.5} />
         <h2 className="text-base font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
-          鏡1 — 優先度の鏡
+          鏡1 — 好みの分析
         </h2>
         <Dialog>
           <DialogTrigger asChild>
@@ -253,9 +329,9 @@ function Mirror1Card({
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>優先度の鏡とは</DialogTitle>
+              <DialogTitle>鏡1とは</DialogTitle>
               <DialogDescription>
-                「最高」と「ありかな」のギャップから、言葉にしていない本当の条件を読み取ります。
+                候補の評価とタグから、重視している条件を整理します。5件以上たまるとAIが要約します。
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
@@ -268,11 +344,11 @@ function Mirror1Card({
             <div className="grid items-center gap-5 sm:grid-cols-[1fr_0.8fr]">
               <div className="space-y-3">
                 <p className="text-sm leading-7 text-stone-600">
-                  {logCount}件のログから、
-                  <span className="font-semibold text-amber-700">本当に重視している条件</span>をAIが読み解きます。
+                  {logCount}件の候補から、
+                  <span className="font-semibold text-amber-700">重視している条件</span>をAIが読み解きます。
                 </p>
                 <Button onClick={run} disabled={loading} className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
-                  {loading ? <><RefreshCw className="size-4 animate-spin" />分析中</> : <><Sparkles className="size-4" />鏡に映してもらう</>}
+                  {loading ? <><RefreshCw className="size-4 animate-spin" />分析中</> : <><Sparkles className="size-4" />AIで整理する</>}
                 </Button>
                 {error && <p className="text-sm text-rose-500">{error}</p>}
               </div>
@@ -293,8 +369,8 @@ function Mirror1Card({
 
           <Tabs defaultValue="priority">
             <TabsList>
-              <TabsTrigger value="priority">Priority</TabsTrigger>
-              <TabsTrigger value="signals">Signals</TabsTrigger>
+              <TabsTrigger value="priority">重視条件</TabsTrigger>
+              <TabsTrigger value="signals">傾向</TabsTrigger>
             </TabsList>
 
             <TabsContent value="priority" className="space-y-3">
@@ -566,7 +642,7 @@ function Mirror3Card({
             <span className="text-sm font-semibold text-stone-700">鏡3 — 変化の鏡</span>
           </div>
           <p className="text-sm text-stone-500">
-            あと<span className="font-bold text-amber-600">{5 - logDayCount}日分</span>記録すると解放されます
+            あと<span className="font-bold text-amber-600">{5 - logDayCount}日分</span>候補を見ていくと解放されます
           </p>
         </CardContent>
       </Card>
@@ -691,7 +767,7 @@ export function PriorityMirror({
               鏡はまだ眠っています
             </h3>
             <p className="mt-3 text-sm leading-7 text-stone-500">
-              物件を記録していくと、あなたの本当の優先度が見えてきます。
+              物件候補を1件追加すると、まずは候補の見え方を確認できます。5件たまるとAI分析も使えます。
             </p>
           </div>
           <MirrorIllustration />

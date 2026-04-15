@@ -44,13 +44,13 @@ export default async function EditLogPage({ params }: Props) {
               <div className="flex-1">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
                   <Pencil className="size-3.5 text-amber-500" />
-                  Edit entry
+                  Edit candidate
                 </div>
                 <h1
                   className="mt-4 text-[1.75rem] font-bold text-stone-900"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
-                  記録を編集する
+                  物件候補を編集する
                 </h1>
                 <p className="mt-2 text-sm leading-7 text-stone-500">
                   {log.title ?? '名称未設定の物件'}

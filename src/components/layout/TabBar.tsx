@@ -6,7 +6,7 @@ import { Home, Sparkles, Users, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const ALL_TABS = [
-  { href: '/log',      label: 'ログ',  Icon: Home,     pairOnly: false },
+  { href: '/log',      label: '候補',  Icon: Home,     pairOnly: false },
   { href: '/mirror',   label: '鏡',    Icon: Sparkles, pairOnly: false },
   { href: '/pair',     label: 'ペア',  Icon: Users,    pairOnly: true  },
   { href: '/settings', label: '設定',  Icon: Settings, pairOnly: false },

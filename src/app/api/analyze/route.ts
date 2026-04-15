@@ -50,13 +50,13 @@ export async function POST(req: NextRequest) {
   const logs = (logsRaw ?? []) as PropertyLog[]
 
   if (logs.length < 5) {
-    return NextResponse.json({ error: 'ログが5件以上必要です' }, { status: 422 })
+    return NextResponse.json({ error: 'AI分析には候補が5件以上必要です' }, { status: 422 })
   }
 
   const logsText = formatLogs(logs)
 
   const prompt = `あなたは住まい選びの行動分析の専門家です。
-ユーザーが記録した物件ログを読み、言葉ではなく行動から本当の優先度を見抜いてください。
+ユーザーが追加した物件候補を読み、言葉ではなく行動から重視している条件を見抜いてください。
 
 ## 評価スケール
 「最高」＞「いいな」＞「ありかな」の3段階です。

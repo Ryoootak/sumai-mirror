@@ -37,7 +37,7 @@ export function AcceptInviteButton({
         return
       }
 
-      router.push('/pair')
+      router.push('/log')
       router.refresh()
     })
   }

@@ -30,16 +30,16 @@ export default async function OnboardingPage() {
               />
               <div className="mt-3 text-center">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700/80">
-                  Choose your start
+                  First step
                 </p>
                 <h1
                   className="mt-2 text-[1.9rem] font-bold tracking-tight text-stone-900"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
-                  はじめ方を選ぶ
+                  まずは物件候補を1件追加しましょう
                 </h1>
                 <p className="mt-2 text-sm leading-7 text-stone-500">
-                  SUMAI MIRROR は、ひとりでも、二人でも同じ判断材料を整えられます。
+                  候補を入れ始めると、あとから比較しやすくなります。共有はあとからでも始められます。
                 </p>
               </div>
             </CardContent>
@@ -51,9 +51,9 @@ export default async function OnboardingPage() {
                 <Users className="size-4" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-stone-800">ペアを作る</h2>
+                <h2 className="text-sm font-semibold text-stone-800">パートナーと共有して始める</h2>
                 <p className="mt-1 text-sm leading-6 text-stone-500">
-                  招待リンクを発行して、夫婦やパートナーと同じ環境を共有します。
+                  招待リンクを作って、同じ物件候補を一緒に見られる環境を作ります。
                 </p>
               </div>
             </div>
@@ -64,7 +64,7 @@ export default async function OnboardingPage() {
               <div>
                 <h2 className="text-sm font-semibold text-stone-800">ひとりで始める</h2>
                 <p className="mt-1 text-sm leading-6 text-stone-500">
-                  一人暮らし・単身向けの物件を、自分のペースで記録・分析します。
+                  自分のペースで候補を整理できます。必要になったらあとから共有できます。
                 </p>
               </div>
             </div>
@@ -75,7 +75,7 @@ export default async function OnboardingPage() {
               <div>
                 <h2 className="text-sm font-semibold text-stone-800">招待リンクで参加する</h2>
                 <p className="mt-1 text-sm leading-6 text-stone-500">
-                  相手から届いたリンクを開くと、同じ環境に参加できます。
+                  相手から届いたリンクを開くと、同じ候補一覧に参加できます。
                 </p>
               </div>
             </div>
@@ -84,7 +84,7 @@ export default async function OnboardingPage() {
           <StartProjectActions />
 
           <p className="text-center text-sm text-stone-500">
-            招待リンクを受け取っている場合は、そのリンクをこのまま開いてください。
+            招待リンクを受け取っている場合は、そのリンクを開くと参加後に物件候補から始まります。
           </p>
         </div>
       </div>

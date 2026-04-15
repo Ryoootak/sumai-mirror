@@ -50,12 +50,12 @@ export async function POST(req: NextRequest) {
 
   const dayCount = new Set(logs.map(l => l.created_at.slice(0, 10))).size
   if (dayCount < 5) {
-    return NextResponse.json({ error: '5日分以上の記録が必要です' }, { status: 422 })
+    return NextResponse.json({ error: '5日分以上の候補が必要です' }, { status: 422 })
   }
 
   const logsText = formatLogsChronological(logs)
 
-  const prompt = `家探し中のユーザーの記録を時系列で分析してください。
+  const prompt = `家探し中のユーザーの物件候補を時系列で分析してください。
 初期と最近で評価の傾向がどう変化したか、何が絞られてきたかを整理します。
 
 ## ログデータ（古い順）

@@ -63,7 +63,7 @@ export default async function MirrorPage() {
             />
             <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
               <Sparkles className="size-3.5 text-amber-500" />
-              Preference mirror
+              Mirror analysis
             </div>
             <h1
               className="mt-4 text-[2rem] font-bold text-stone-900"
@@ -71,7 +71,7 @@ export default async function MirrorPage() {
             >
               鏡
             </h1>
-            <p className="mt-2 max-w-[200px] text-sm leading-7 text-stone-500">ログから見えてくる、本当の優先度を静かに整理します。</p>
+            <p className="mt-2 max-w-[240px] text-sm leading-7 text-stone-500">物件候補から、重視している条件や二人の違いを整理できます。</p>
           </CardContent>
         </Card>
       </header>
