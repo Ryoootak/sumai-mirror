@@ -40,7 +40,7 @@ export function DeleteAccountButton() {
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-8">
-          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-xl">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-xl mb-20">
             <h2 className="text-lg font-bold text-stone-900">アカウントを削除しますか？</h2>
             <p className="mt-2 text-sm leading-6 text-stone-500">
               すべての物件ログ・分析データが完全に削除されます。この操作は取り消せません。
