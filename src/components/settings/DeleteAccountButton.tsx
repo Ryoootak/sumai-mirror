@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 
-export function DeleteAccountButton() {
+export function DeleteAccountButton({ deleteToken }: { deleteToken: string }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -13,7 +13,11 @@ export function DeleteAccountButton() {
     setError(null)
 
     try {
-      const res = await fetch('/api/account/delete', { method: 'DELETE' })
+      const res = await fetch('/api/account/delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: deleteToken }),
+      })
       const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
