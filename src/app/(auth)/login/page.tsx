@@ -6,11 +6,12 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { sanitizeAuthRedirectPath } from '@/lib/auth-redirect'
 
 function LoginPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const next = useMemo(() => searchParams.get('next') || '/log', [searchParams])
+  const next = useMemo(() => sanitizeAuthRedirectPath(searchParams.get('next')), [searchParams])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)

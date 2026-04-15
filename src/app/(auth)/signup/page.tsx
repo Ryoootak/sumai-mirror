@@ -6,10 +6,11 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { sanitizeAuthRedirectPath } from '@/lib/auth-redirect'
 
 function SignupPageContent() {
   const searchParams = useSearchParams()
-  const next = useMemo(() => searchParams.get('next') || '/log', [searchParams])
+  const next = useMemo(() => sanitizeAuthRedirectPath(searchParams.get('next')), [searchParams])
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { sanitizeAuthRedirectPath } from '@/lib/auth-redirect'
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
@@ -43,7 +44,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/settings')
   if (isAppRoute && !user) {
     const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('next', pathname)
+    loginUrl.searchParams.set('next', sanitizeAuthRedirectPath(pathname))
     return NextResponse.redirect(loginUrl)
   }
 
