@@ -1,11 +1,12 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 
-export async function DELETE(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization')
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+export async function DELETE() {
+  const supabase = createClient()
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-  if (!token) {
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -13,12 +14,6 @@ export async function DELETE(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
   )
-
-  const { data: { user }, error: authError } = await admin.auth.getUser(token)
-
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
 
   const { error } = await admin.auth.admin.deleteUser(user.id, false)
 
