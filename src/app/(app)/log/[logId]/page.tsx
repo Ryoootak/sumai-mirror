@@ -39,15 +39,21 @@ export default async function LogDetailPage({ params }: Props) {
   // プロジェクトメンバーであれば自分以外の候補も閲覧可（RLSが担保）
   const { data: logRaw } = await supabase
     .from('property_logs')
-    .select('*, users_profile(name)')
+    .select('*')
     .eq('id', params.logId)
     .single()
 
   if (!logRaw) notFound()
 
-  const log = logRaw as PropertyLog & { users_profile: { name: string | null } | null }
+  const log = logRaw as PropertyLog
   const isMyLog = log.user_id === user.id
-  const creatorName = log.users_profile?.name ?? 'パートナー'
+
+  const { data: creatorProfile } = isMyLog ? { data: null } : await supabase
+    .from('users_profile')
+    .select('name')
+    .eq('id', log.user_id)
+    .single()
+  const creatorName = creatorProfile?.name ?? 'パートナー'
 
   const dateStr = new Date(log.created_at).toLocaleDateString('ja-JP', {
     year: 'numeric', month: 'long', day: 'numeric',
