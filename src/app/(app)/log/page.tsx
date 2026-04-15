@@ -60,7 +60,6 @@ export default async function LogPage() {
             width={110}
             height={110}
             className="absolute -right-2 -bottom-2 opacity-80 select-none pointer-events-none drop-shadow-sm"
-            priority
           />
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-3">

@@ -5,7 +5,7 @@ import { Sparkles } from 'lucide-react'
 import { getActiveProjectId } from '@/lib/active-project'
 import { PriorityMirror } from '@/components/mirror/PriorityMirror'
 import { Card, CardContent } from '@/components/ui/card'
-import type { PropertyLog } from '@/types'
+import type { Analysis, PropertyLog } from '@/types'
 
 export default async function MirrorPage() {
   const supabase = createClient()
@@ -15,56 +15,36 @@ export default async function MirrorPage() {
   const projectId = await getActiveProjectId(supabase, user.id)
   if (!projectId) redirect('/onboarding')
 
-  // 自分のログ
-  const { data: logsRaw } = await supabase
-    .from('property_logs')
-    .select('*')
-    .eq('project_id', projectId)
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-  const logs = (logsRaw ?? []) as PropertyLog[]
-
-  // パートナー確認
-  const { data: members } = await supabase
-    .from('project_members')
-    .select('user_id')
-    .eq('project_id', projectId)
-  const partnerId = members?.find((m) => m.user_id !== user.id)?.user_id ?? null
-
-  // 3つの最新分析を並行取得
   const [
-    { data: latestPriority },
-    { data: latestAlignment },
-    { data: latestTimeline },
+    { data: logsRaw },
+    { data: members },
+    { data: analysesRaw },
   ] = await Promise.all([
     supabase
-      .from('analyses')
-      .select('*')
+      .from('property_logs')
+      .select('id, score, tags_good, tags_bad')
       .eq('project_id', projectId)
       .eq('user_id', user.id)
-      .eq('type', 'priority')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('project_members')
+      .select('user_id')
+      .eq('project_id', projectId),
     supabase
       .from('analyses')
       .select('*')
       .eq('project_id', projectId)
       .eq('user_id', user.id)
-      .eq('type', 'alignment')
+      .in('type', ['priority', 'alignment', 'timeline'])
       .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    supabase
-      .from('analyses')
-      .select('*')
-      .eq('project_id', projectId)
-      .eq('user_id', user.id)
-      .eq('type', 'timeline')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
   ])
+
+  const logs = (logsRaw ?? []) as Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad'>[]
+  const partnerId = members?.find((member) => member.user_id !== user.id)?.user_id ?? null
+  const analyses = (analysesRaw ?? []) as Analysis[]
+  const latestPriority = analyses.find((analysis) => analysis.type === 'priority') ?? null
+  const latestAlignment = analyses.find((analysis) => analysis.type === 'alignment') ?? null
+  const latestTimeline = analyses.find((analysis) => analysis.type === 'timeline') ?? null
 
   return (
     <div className="pb-28">
@@ -77,7 +57,6 @@ export default async function MirrorPage() {
               width={100}
               height={100}
               className="absolute right-4 top-1/2 -translate-y-1/2 opacity-85 select-none pointer-events-none drop-shadow-sm"
-              priority
             />
             <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
               <Sparkles className="size-3.5 text-amber-500" />

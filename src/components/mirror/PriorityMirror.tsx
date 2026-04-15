@@ -16,6 +16,8 @@ import type { PropertyLog } from '@/types'
 
 // ── Types ──────────────────────────────────────────────────
 
+type MirrorLog = Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad'>
+
 interface AnalysisRecord {
   id: string
   result: Record<string, unknown>
@@ -68,7 +70,7 @@ interface TimelineResult {
 }
 
 interface Props {
-  logs: PropertyLog[]
+  logs: MirrorLog[]
   projectId: string
   userId: string
   partnerId: string | null
@@ -79,7 +81,7 @@ interface Props {
 
 // ── Helpers ─────────────────────────────────────────────────
 
-function computeTagFrequency(logs: PropertyLog[]): { tag: string; count: number; rate: number }[] {
+function computeTagFrequency(logs: MirrorLog[]): { tag: string; count: number; rate: number }[] {
   const highScore = logs.filter((l) => l.score === 3)
   if (highScore.length === 0) return []
   const freq: Record<string, number> = {}
@@ -91,7 +93,7 @@ function computeTagFrequency(logs: PropertyLog[]): { tag: string; count: number;
     .map(([tag, count]) => ({ tag, count, rate: Math.round((count / total) * 100) }))
 }
 
-function computeBadFrequency(logs: PropertyLog[]): { tag: string; count: number }[] {
+function computeBadFrequency(logs: MirrorLog[]): { tag: string; count: number }[] {
   const lowScore = logs.filter((l) => l.score === 1)
   if (lowScore.length === 0) return []
   const freq: Record<string, number> = {}
@@ -189,7 +191,7 @@ function Mirror1Card({
   projectId: string
   userId: string
   logCount: number
-  logs: PropertyLog[]
+  logs: MirrorLog[]
   latestAnalysis: AnalysisRecord | null
 }) {
   const [loading, setLoading] = useState(false)

@@ -28,7 +28,6 @@ export default async function SettingsPage() {
               width={80}
               height={80}
               className="absolute right-4 top-1/2 -translate-y-1/2 opacity-90 select-none pointer-events-none drop-shadow-sm"
-              priority
             />
             <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
               <Settings2 className="size-3.5 text-amber-500" />
