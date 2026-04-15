@@ -15,16 +15,21 @@ export function DeleteAccountButton() {
     setLoading(true)
     setError(null)
 
-    const result = await deleteAccount()
+    try {
+      const result = await deleteAccount()
 
-    if (result.error) {
-      setError(result.error)
+      if (result?.error) {
+        setError(result.error)
+        setLoading(false)
+        return
+      }
+
+      router.push('/login')
+      router.refresh()
+    } catch {
+      setError('削除に失敗しました')
       setLoading(false)
-      return
     }
-
-    router.push('/login')
-    router.refresh()
   }
 
   return (
