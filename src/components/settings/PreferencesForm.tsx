@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 interface PreferencesFormProps {
@@ -19,6 +20,7 @@ const FIELDS: { key: PreferenceKey; label: string; placeholder: string }[] = [
 ]
 
 export function PreferencesForm({ userId, initialPreferences }: PreferencesFormProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -29,6 +31,16 @@ export function PreferencesForm({ userId, initialPreferences }: PreferencesFormP
     must_have: initialPreferences.must_have ?? '',
     avoid: initialPreferences.avoid ?? '',
   })
+
+  useEffect(() => {
+    setForm({
+      area: initialPreferences.area ?? '',
+      budget: initialPreferences.budget ?? '',
+      layout: initialPreferences.layout ?? '',
+      must_have: initialPreferences.must_have ?? '',
+      avoid: initialPreferences.avoid ?? '',
+    })
+  }, [initialPreferences])
 
   const handleChange = (key: PreferenceKey, value: string) => {
     setSaved(false)
@@ -53,6 +65,7 @@ export function PreferencesForm({ userId, initialPreferences }: PreferencesFormP
       }
 
       setSaved(true)
+      router.refresh()
     })
   }
 
