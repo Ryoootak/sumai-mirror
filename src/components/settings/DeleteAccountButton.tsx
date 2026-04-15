@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
-import { deleteAccount } from '@/app/(app)/settings/actions'
+import { createClient } from '@/lib/supabase/client'
 
 export function DeleteAccountButton() {
   const router = useRouter()
@@ -16,13 +16,31 @@ export function DeleteAccountButton() {
     setError(null)
 
     try {
-      const result = await deleteAccount()
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
 
-      if (result?.error) {
-        setError(result.error)
+      if (!session?.access_token) {
+        setError('ログインセッションが見つかりません')
         setLoading(false)
         return
       }
+
+      const response = await fetch('/api/account/delete', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      })
+
+      const result = await response.json().catch(() => ({})) as { error?: string }
+
+      if (!response.ok) {
+        setError(result.error ?? '削除に失敗しました')
+        setLoading(false)
+        return
+      }
+
+      await supabase.auth.signOut()
 
       router.push('/login')
       router.refresh()

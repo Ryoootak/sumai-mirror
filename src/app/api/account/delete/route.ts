@@ -20,10 +20,15 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { error } = await admin.auth.admin.deleteUser(user.id)
+  const { error } = await admin.auth.admin.deleteUser(user.id, false)
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  const { data: deletedUser, error: verifyError } = await admin.auth.admin.getUserById(user.id)
+  if (!verifyError && deletedUser?.user) {
+    return NextResponse.json({ error: 'アカウント削除が完了していません' }, { status: 500 })
   }
 
   return NextResponse.json({ ok: true })
