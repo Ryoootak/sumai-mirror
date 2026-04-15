@@ -1,5 +1,27 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
+function isMissingActiveProjectColumnError(message: string) {
+  return message.includes('active_project_id')
+    && (message.includes('column') || message.includes('schema cache'))
+}
+
+async function getFallbackProjectId(
+  supabase: SupabaseClient,
+  userId: string
+): Promise<string | null> {
+  const { data: memberships, error } = await supabase
+    .from('project_members')
+    .select('project_id, role')
+    .eq('user_id', userId)
+
+  if (error) {
+    throw new Error(`fallback projectの取得に失敗しました: ${error.message}`)
+  }
+
+  const ownerProject = memberships?.find((membership) => membership.role === 'owner')?.project_id
+  return ownerProject ?? memberships?.[0]?.project_id ?? null
+}
+
 export async function getActiveProjectId(
   supabase: SupabaseClient,
   userId: string
@@ -11,6 +33,9 @@ export async function getActiveProjectId(
     .maybeSingle()
 
   if (error) {
+    if (isMissingActiveProjectColumnError(error.message)) {
+      return getFallbackProjectId(supabase, userId)
+    }
     throw new Error(`active projectの取得に失敗しました: ${error.message}`)
   }
 
@@ -28,6 +53,9 @@ export async function setActiveProjectId(
     .eq('id', userId)
 
   if (error) {
+    if (isMissingActiveProjectColumnError(error.message)) {
+      return
+    }
     throw new Error(`active projectの更新に失敗しました: ${error.message}`)
   }
 }
