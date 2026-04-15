@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
 
 export async function DELETE() {
   console.log('[DELETE /api/account/delete] start')
+
+  const cookieStore = cookies()
+  const allCookies = cookieStore.getAll()
+  console.log('[DELETE /api/account/delete] cookies:', allCookies.map(c => c.name))
 
   const supabase = createClient()
   const { data: { user }, error: userError } = await supabase.auth.getUser()
