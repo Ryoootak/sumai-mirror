@@ -211,21 +211,6 @@ export default async function LogPage() {
           </>
         )}
 
-        {logs.length > 0 && logs.length < 5 && (
-          <Card className="border-amber-200 bg-amber-50/70">
-            <CardContent className="flex items-center justify-between gap-4 p-4">
-              <div>
-                <p className="text-sm font-semibold text-amber-900">鏡の分析が育っています</p>
-                <p className="text-sm text-amber-800/80">
-                  候補の見え方は今すぐ確認できます。あと<span className="font-bold">{5 - logs.length}件</span>でAI分析も使えます。
-                </p>
-              </div>
-              <div className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-amber-700 shadow-sm">
-                Growing
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </main>
 
       <div className="fixed bottom-20 right-4">
