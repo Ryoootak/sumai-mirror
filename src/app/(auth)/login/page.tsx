@@ -34,11 +34,11 @@ function LoginPageContent() {
   }
 
   return (
-    <div className="w-full max-w-md space-y-8">
-      <div className="space-y-5 text-center">
-        <div className="relative overflow-hidden rounded-[2rem] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(255,255,255,0.98))] px-6 pb-6 pt-8 shadow-[0_18px_50px_-30px_rgba(120,74,29,0.35)]">
-          <div className="pointer-events-none absolute inset-x-10 top-0 h-24 rounded-full bg-amber-200/30 blur-3xl" />
-          <div className="relative mx-auto flex max-w-[220px] justify-center">
+    <div className="w-full max-w-md space-y-5 sm:space-y-8">
+      <div className="space-y-4 text-center sm:space-y-5">
+        <div className="relative overflow-hidden rounded-[1.5rem] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(255,255,255,0.98))] px-4 pb-4 pt-5 shadow-[0_18px_50px_-30px_rgba(120,74,29,0.35)] sm:rounded-[2rem] sm:px-6 sm:pb-6 sm:pt-8">
+          <div className="pointer-events-none absolute inset-x-10 top-0 h-20 rounded-full bg-amber-200/30 blur-3xl sm:h-24" />
+          <div className="relative mx-auto flex max-w-[150px] justify-center sm:max-w-[220px]">
             <Image
               src="/images/home_mirror.png"
               alt="SUMAI MIRROR"
@@ -48,27 +48,27 @@ function LoginPageContent() {
               className="h-auto w-full object-contain"
             />
           </div>
-          <div className="relative mt-4 space-y-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-700/80">
+          <div className="relative mt-3 space-y-1.5 sm:mt-4 sm:space-y-2">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700/80 sm:text-[11px] sm:tracking-[0.24em]">
               Property journal
             </p>
             <h1
-              className="text-3xl font-bold tracking-tight text-stone-800"
+              className="text-[1.85rem] font-bold tracking-tight text-stone-800 sm:text-3xl"
               style={{ fontFamily: 'var(--font-serif)' }}
             >
               SUMAI MIRROR
             </h1>
-            <p className="mx-auto max-w-xs text-sm leading-relaxed text-stone-500">
+            <p className="mx-auto max-w-[15rem] text-[13px] leading-relaxed text-stone-500 sm:max-w-xs sm:text-sm">
               家探しの記録を静かに整えて、二人の判断材料を気持ちよく残せます。
             </p>
           </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-stone-700">メールアドレス</label>
-          <div className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3.5 transition focus-within:border-amber-400 focus-within:ring-3 focus-within:ring-amber-400/20">
+          <label className="block text-[13px] font-medium text-stone-700 sm:text-sm">メールアドレス</label>
+          <div className="flex items-center gap-3 rounded-[1.15rem] border border-stone-200 bg-white px-3.5 py-3 transition focus-within:border-amber-400 focus-within:ring-3 focus-within:ring-amber-400/20 sm:rounded-2xl sm:px-4 sm:py-3.5">
             <Mail className="size-4 text-stone-400" />
             <input
               type="email"
@@ -77,14 +77,14 @@ function LoginPageContent() {
               required
               autoComplete="email"
               placeholder="you@example.com"
-              className="w-full bg-transparent text-stone-800 placeholder:text-stone-300 outline-none"
+              className="w-full bg-transparent text-[15px] text-stone-800 placeholder:text-stone-300 outline-none"
             />
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-stone-700">パスワード</label>
-          <div className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3.5 transition focus-within:border-amber-400 focus-within:ring-3 focus-within:ring-amber-400/20">
+          <label className="block text-[13px] font-medium text-stone-700 sm:text-sm">パスワード</label>
+          <div className="flex items-center gap-3 rounded-[1.15rem] border border-stone-200 bg-white px-3.5 py-3 transition focus-within:border-amber-400 focus-within:ring-3 focus-within:ring-amber-400/20 sm:rounded-2xl sm:px-4 sm:py-3.5">
             <LockKeyhole className="size-4 text-stone-400" />
             <input
               type="password"
@@ -93,7 +93,7 @@ function LoginPageContent() {
               required
               autoComplete="current-password"
               placeholder="••••••••"
-              className="w-full bg-transparent text-stone-800 placeholder:text-stone-300 outline-none"
+              className="w-full bg-transparent text-[15px] text-stone-800 placeholder:text-stone-300 outline-none"
             />
           </div>
         </div>
@@ -107,14 +107,14 @@ function LoginPageContent() {
         <Button
           type="submit"
           disabled={loading}
-          className="h-12 w-full rounded-2xl bg-amber-500 text-base font-semibold text-white shadow-[0_12px_30px_-18px_rgba(217,119,6,0.8)] transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
+          className="h-11 w-full rounded-[1.15rem] bg-amber-500 text-[15px] font-semibold text-white shadow-[0_12px_30px_-18px_rgba(217,119,6,0.8)] transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60 sm:h-12 sm:rounded-2xl sm:text-base"
         >
           <ArrowRight className="size-4" />
           {loading ? 'ログイン中...' : 'ログイン'}
         </Button>
       </form>
 
-      <p className="text-center text-sm text-stone-500">
+      <p className="text-center text-[13px] text-stone-500 sm:text-sm">
         アカウントがない方は{' '}
         <Link
           href={next === '/log' ? '/signup' : `/signup?next=${encodeURIComponent(next)}`}
@@ -129,7 +129,7 @@ function LoginPageContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="w-full max-w-sm" />}>
+    <Suspense fallback={<div className="w-full max-w-md" />}>
       <LoginPageContent />
     </Suspense>
   )
