@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Sparkles } from 'lucide-react'
-import { getActiveProjectId } from '@/lib/active-project'
+import { getActiveProjectId, getProjectMode } from '@/lib/active-project'
 import { PriorityMirror } from '@/components/mirror/PriorityMirror'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Analysis, PropertyLog } from '@/types'
@@ -14,6 +14,8 @@ export default async function MirrorPage() {
 
   const projectId = await getActiveProjectId(supabase, user.id)
   if (!projectId) redirect('/onboarding')
+
+  const mode = await getProjectMode(supabase, projectId)
 
   const [
     { data: logsRaw },
@@ -82,6 +84,7 @@ export default async function MirrorPage() {
           latestPriorityAnalysis={latestPriority ?? null}
           latestAlignmentAnalysis={latestAlignment ?? null}
           latestTimelineAnalysis={latestTimeline ?? null}
+          isSolo={mode === 'solo'}
         />
       </main>
     </div>
