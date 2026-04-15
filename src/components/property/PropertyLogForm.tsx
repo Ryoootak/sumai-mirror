@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useTransition } from 'react'
+import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -172,7 +172,7 @@ interface PropertyLogFormProps {
 
 export function PropertyLogForm({ projectId, initialData, mode = 'create' }: PropertyLogFormProps) {
   const router = useRouter()
-  const [isPending, start] = useTransition()
+  const [isPending, setIsPending] = useState(false)
   const [form, setForm] = useState<PropertyLogFormData>(
     initialData
       ? {
@@ -254,6 +254,7 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
 
     if (error) { setSubmitError(error.message); return }
 
+    setIsPending(true)
     const dest = mode === 'edit' && initialData ? `/log/${initialData.id}` : '/log'
     window.location.href = dest
   }
