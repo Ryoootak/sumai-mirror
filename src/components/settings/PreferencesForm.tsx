@@ -73,13 +73,13 @@ export function PreferencesForm({ userId, initialPreferences }: PreferencesFormP
 
       <div className="flex items-center justify-between gap-3 pt-2">
         <div className="min-h-5 text-sm">
-          {error && <p className="text-rose-500">{error}</p>}
-          {!error && saved && <p className="text-emerald-600">保存しました。</p>}
+          {error && <p className="text-[#b65e2a]">{error}</p>}
+          {!error && saved && <p className="text-[#9a5b19]">保存しました。</p>}
         </div>
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-full bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-full bg-[#3c3128] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2f2620] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isPending ? '保存中...' : '条件を保存'}
         </button>

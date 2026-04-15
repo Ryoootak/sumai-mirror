@@ -67,8 +67,8 @@ export function PartnerReactionForm({ logId, initialData }: PartnerReactionFormP
 
   if (saved) {
     return (
-      <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-5 text-center">
-        <p className="text-sm font-semibold text-emerald-700">反応を保存しました</p>
+      <div className="rounded-3xl border border-amber-200 bg-amber-50 p-5 text-center">
+        <p className="text-sm font-semibold text-[#9a5b19]">反応を保存しました</p>
       </div>
     )
   }

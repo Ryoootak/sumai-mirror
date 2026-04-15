@@ -23,8 +23,8 @@ const SCORE_LABEL: Record<number, { label: string; className: string }> = {
 
 const TYPE_LABEL: Record<PropertyType, { label: string; className: string }> = {
   mansion: { label: 'マンション', className: 'bg-amber-100 text-amber-700' },
-  house:   { label: '戸建て',     className: 'bg-emerald-100 text-emerald-700' },
-  land:    { label: '土地',       className: 'bg-sky-100 text-sky-700' },
+  house:   { label: '戸建て',     className: 'bg-[#efe1d1] text-[#6a5848]' },
+  land:    { label: '土地',       className: 'bg-[#fbf1e2] text-[#9a5b19]' },
 }
 
 interface Props {
@@ -78,7 +78,7 @@ export default async function LogDetailPage({ params }: Props) {
                     {isMyLog ? 'My candidate' : `${creatorName}'s candidate`}
                   </div>
                   <h1
-                    className="mt-4 text-[1.75rem] font-bold text-stone-900"
+                    className="mt-4 text-[1.75rem] font-bold text-stone-800"
                     style={{ fontFamily: 'var(--font-serif)' }}
                   >
                     物件候補の詳細
@@ -181,7 +181,7 @@ export default async function LogDetailPage({ params }: Props) {
             </h3>
             <div className="flex flex-wrap gap-2">
               {log.tags_bad.map((tag) => (
-                <span key={tag} className="rounded-full bg-rose-50 border border-rose-200 px-3.5 py-1.5 text-sm font-medium text-rose-700">
+                <span key={tag} className="rounded-full border border-[#e7d3bc] bg-[#fbf4ea] px-3.5 py-1.5 text-sm font-medium text-[#6a5848]">
                   {tag}
                 </span>
               ))}

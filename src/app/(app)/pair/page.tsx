@@ -40,7 +40,7 @@ export default async function PairPage() {
               Shared view
             </div>
             <h1
-              className="mt-4 text-[2rem] font-bold text-stone-900"
+              className="mt-4 text-[2rem] font-bold text-stone-800"
               style={{ fontFamily: 'var(--font-serif)' }}
             >
               ペア
@@ -58,10 +58,10 @@ export default async function PairPage() {
                 <Users className="size-5" strokeWidth={1.8} />
               </div>
               <div>
-                <p className="font-semibold text-stone-900">
+                <p className="font-semibold text-stone-800">
                   {(partner.users_profile as { name?: string } | null)?.name ?? 'パートナー'}
                 </p>
-                <p className="mt-0.5 text-sm font-medium text-emerald-600">接続済み</p>
+                <p className="mt-0.5 text-sm font-medium text-[#9a5b19]">接続済み</p>
               </div>
             </CardContent>
           </Card>
@@ -72,7 +72,7 @@ export default async function PairPage() {
                 <Link2 className="size-5" />
               </div>
               <div>
-                <h3 className="font-bold text-stone-900" style={{ fontFamily: 'var(--font-serif)' }}>
+                <h3 className="font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
                   パートナーを招待しよう
                 </h3>
                 <p className="mt-2 text-sm leading-7 text-stone-500">

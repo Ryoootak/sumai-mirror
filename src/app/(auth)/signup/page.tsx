@@ -167,7 +167,7 @@ function SignupPageContent() {
         </div>
 
         {error && (
-          <div className="rounded-2xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-600">
+          <div className="rounded-2xl border border-[#efcfb0] bg-[#fbf1e5] px-4 py-3 text-sm text-[#b65e2a]">
             {error}
           </div>
         )}

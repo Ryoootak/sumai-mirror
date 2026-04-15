@@ -28,7 +28,7 @@ export function CardTitle({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  return <div className={cn('text-base font-semibold text-stone-900', className)} {...props} />
+  return <div className={cn('text-base font-semibold text-stone-800', className)} {...props} />
 }
 
 export function CardDescription({

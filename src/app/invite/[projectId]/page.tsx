@@ -57,7 +57,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
           {alreadyJoined ? (
             <Card>
               <CardContent className="space-y-3 p-6 text-center">
-                <p className="text-sm font-medium text-emerald-600">このペアにはすでに参加済みです。</p>
+                <p className="text-sm font-medium text-[#9a5b19]">このペアにはすでに参加済みです。</p>
                 <Link
                   href="/log"
                   className="inline-flex items-center justify-center rounded-2xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600"
@@ -70,15 +70,15 @@ export default async function InvitePage({ params }: InvitePageProps) {
             <Card>
               <CardContent className="space-y-5 p-6">
                 <div className="space-y-2">
-                  <h2 className="text-lg font-semibold text-stone-900">今の環境をどう扱いますか？</h2>
+                  <h2 className="text-lg font-semibold text-stone-800">今の環境をどう扱いますか？</h2>
                   <p className="text-sm leading-7 text-stone-500">
                     すでに別の環境を使っています。参加前に、現在の候補をどうするか選んでください。
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-stone-200 bg-stone-50/80 p-4 text-sm text-stone-600">
-                  現在の環境には、自分のログが <span className="font-semibold text-stone-900">{currentCounts?.logCount ?? 0}</span> 件、
-                  分析が <span className="font-semibold text-stone-900">{currentCounts?.analysisCount ?? 0}</span> 件あります。
+                  現在の環境には、自分のログが <span className="font-semibold text-stone-800">{currentCounts?.logCount ?? 0}</span> 件、
+                  分析が <span className="font-semibold text-stone-800">{currentCounts?.analysisCount ?? 0}</span> 件あります。
                 </div>
 
                 <div className="space-y-3">
@@ -89,7 +89,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                       </div>
                       <div className="flex-1 space-y-2">
                         <div>
-                          <h3 className="text-sm font-semibold text-stone-900">相手の環境を本番にする</h3>
+                          <h3 className="text-sm font-semibold text-stone-800">相手の環境を本番にする</h3>
                           <p className="mt-1 text-sm leading-6 text-stone-500">
                             今の環境は残したまま、見る先だけ相手の環境へ切り替えます。
                           </p>
@@ -110,7 +110,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                       </div>
                       <div className="flex-1 space-y-2">
                         <div>
-                          <h3 className="text-sm font-semibold text-stone-900">自分の候補を相手の環境へ移す</h3>
+                          <h3 className="text-sm font-semibold text-stone-800">自分の候補を相手の環境へ移す</h3>
                           <p className="mt-1 text-sm leading-6 text-stone-500">
                             自分の物件候補を相手の環境へ移し、分析は最新状態で再生成しやすいように消去します。
                           </p>

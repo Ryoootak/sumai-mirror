@@ -65,7 +65,7 @@ export default async function MirrorPage() {
               Mirror analysis
             </div>
             <h1
-              className="mt-4 text-[2rem] font-bold text-stone-900"
+              className="mt-4 text-[2rem] font-bold text-stone-800"
               style={{ fontFamily: 'var(--font-serif)' }}
             >
               鏡

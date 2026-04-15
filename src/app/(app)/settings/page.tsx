@@ -36,7 +36,7 @@ export default async function SettingsPage() {
               Profile settings
             </div>
             <h1
-              className="mt-4 text-[2rem] font-bold text-stone-900"
+              className="mt-4 text-[2rem] font-bold text-stone-800"
               style={{ fontFamily: 'var(--font-serif)' }}
             >
               設定
@@ -69,7 +69,7 @@ export default async function SettingsPage() {
         <section className="rounded-3xl bg-white border border-stone-100 shadow-sm overflow-hidden divide-y divide-stone-100">
           <Link
             href="/api/auth/signout"
-            className="flex items-center gap-3 px-5 py-4 text-rose-500 hover:bg-rose-50 transition"
+            className="flex items-center gap-3 px-5 py-4 text-[#b65e2a] transition hover:bg-[#fbf1e5]"
           >
             <LogOut className="size-4" strokeWidth={1.5} />
             <span className="font-medium">ログアウト</span>

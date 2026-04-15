@@ -324,10 +324,10 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
           {ogpError && <p className="text-sm text-stone-400">{ogpError}</p>}
           {autofillAttempted && !ogpLoading && !ogpError && (
             <div className="rounded-2xl border border-stone-200 bg-stone-50/80 px-4 py-3 text-sm text-stone-600">
-              <p className={cn('leading-6', autofillStatus.title === 'filled' && 'text-emerald-700')}>
+              <p className={cn('leading-6', autofillStatus.title === 'filled' && 'text-[#9a5b19]')}>
                 {autofillStatus.title === 'filled' ? '物件名を自動入力しました。' : '物件名は自動入力できなかったため、必要なら手入力してください。'}
               </p>
-              <p className={cn('mt-1 leading-6', autofillStatus.price === 'filled' && 'text-emerald-700')}>
+              <p className={cn('mt-1 leading-6', autofillStatus.price === 'filled' && 'text-[#9a5b19]')}>
                 {autofillStatus.price === 'filled' ? '価格を自動入力しました。' : '価格は公開メタ情報から取得できませんでした。手入力してください。'}
               </p>
             </div>
@@ -346,7 +346,7 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
             placeholder="〇〇マンション 3LDK"
             className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
           />
-          {autofillStatus.title === 'filled' && <p className="text-xs text-emerald-700">URLから入力しました</p>}
+          {autofillStatus.title === 'filled' && <p className="text-xs text-[#9a5b19]">URLから入力しました</p>}
         </div>
         <div className="space-y-1.5">
           <label className="block text-sm font-semibold text-stone-700">価格</label>
@@ -357,7 +357,7 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
             placeholder="4,500万円"
             className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
           />
-          {autofillStatus.price === 'filled' && <p className="text-xs text-emerald-700">URLから入力しました</p>}
+          {autofillStatus.price === 'filled' && <p className="text-xs text-[#9a5b19]">URLから入力しました</p>}
           {autofillStatus.price === 'missing' && <p className="text-xs text-stone-400">価格は自動入力できないことがあります</p>}
         </div>
       </section>

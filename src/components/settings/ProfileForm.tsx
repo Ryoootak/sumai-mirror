@@ -83,7 +83,7 @@ export function ProfileForm({ userId, initialName, currentEmail }: ProfileFormPr
             変更
           </button>
           {message && (
-            <p className={`text-xs ${message.type === 'error' ? 'text-rose-500' : 'text-emerald-600'}`}>
+            <p className={`text-xs ${message.type === 'error' ? 'text-[#b65e2a]' : 'text-[#9a5b19]'}`}>
               {message.text}
             </p>
           )}
@@ -117,7 +117,7 @@ export function ProfileForm({ userId, initialName, currentEmail }: ProfileFormPr
       </div>
 
       {message && (
-        <p className={`text-sm ${message.type === 'error' ? 'text-rose-500' : 'text-emerald-600'}`}>
+        <p className={`text-sm ${message.type === 'error' ? 'text-[#b65e2a]' : 'text-[#9a5b19]'}`}>
           {message.text}
         </p>
       )}
@@ -134,7 +134,7 @@ export function ProfileForm({ userId, initialName, currentEmail }: ProfileFormPr
         <button
           type="submit"
           disabled={loading}
-          className="rounded-full bg-stone-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-stone-800 disabled:opacity-60"
+          className="rounded-full bg-[#3c3128] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#2f2620] disabled:opacity-60"
         >
           {loading ? '保存中...' : '保存'}
         </button>

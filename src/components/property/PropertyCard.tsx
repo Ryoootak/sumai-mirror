@@ -14,8 +14,8 @@ const SCORE_LABEL: Record<number, { label: string; className: string }> = {
 
 const TYPE_LABEL: Record<PropertyType, { label: string; className: string }> = {
   mansion: { label: 'マンション', className: 'bg-amber-100 text-amber-700' },
-  house:   { label: '戸建て',     className: 'bg-emerald-100 text-emerald-700' },
-  land:    { label: '土地',       className: 'bg-sky-100 text-sky-700' },
+  house:   { label: '戸建て',     className: 'bg-[#efe1d1] text-[#6a5848]' },
+  land:    { label: '土地',       className: 'bg-[#fbf1e2] text-[#9a5b19]' },
 }
 
 interface PropertyCardProps {
@@ -45,7 +45,7 @@ export function PropertyCard({ log, creatorName, currentUserId }: PropertyCardPr
               {typeInfo.label}
             </span>
           )}
-          <p className="min-w-0 flex-1 truncate text-[14px] font-semibold text-stone-900">
+          <p className="min-w-0 flex-1 truncate text-[14px] font-semibold text-stone-800">
             {log.title ?? '名称未設定の物件'}
           </p>
           <span className={cn('shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold', score.className)}>

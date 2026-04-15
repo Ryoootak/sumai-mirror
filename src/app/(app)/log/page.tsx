@@ -13,8 +13,8 @@ import type { PropertyLog } from '@/types'
 
 const TYPE_SECTIONS = [
   { key: 'mansion', label: 'マンション', badgeClass: 'bg-amber-100 text-amber-700' },
-  { key: 'house',   label: '戸建て',     badgeClass: 'bg-emerald-100 text-emerald-700' },
-  { key: 'land',    label: '土地',       badgeClass: 'bg-sky-100 text-sky-700' },
+  { key: 'house',   label: '戸建て',     badgeClass: 'bg-[#efe1d1] text-[#6a5848]' },
+  { key: 'land',    label: '土地',       badgeClass: 'bg-[#fbf1e2] text-[#9a5b19]' },
 ] as const
 
 export default async function LogPage() {
@@ -69,7 +69,7 @@ export default async function LogPage() {
               </div>
               <div>
                 <h1
-                  className="text-[2rem] font-bold text-stone-900"
+                  className="text-[2rem] font-bold text-stone-800"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
                   物件候補
@@ -85,7 +85,7 @@ export default async function LogPage() {
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
                 <p className="text-[11px] font-medium tracking-[0.08em] text-stone-400">候補数</p>
-                <p className="mt-2 text-2xl font-semibold text-stone-900">{logs.length}</p>
+                <p className="mt-2 text-2xl font-semibold text-stone-800">{logs.length}</p>
               </CardContent>
             </Card>
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
@@ -97,7 +97,7 @@ export default async function LogPage() {
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
                 <p className="text-[11px] font-medium tracking-[0.08em] text-stone-400">最高評価</p>
-                <p className="mt-2 text-2xl font-semibold text-emerald-600">{highScoreCount}</p>
+                <p className="mt-2 text-2xl font-semibold text-[#9a5b19]">{highScoreCount}</p>
               </CardContent>
             </Card>
           </div>
@@ -115,14 +115,14 @@ export default async function LogPage() {
               <Sparkles className="size-5 shrink-0" strokeWidth={1.7} />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-stone-900">鏡 | 好みの分析</p>
+              <p className="text-sm font-semibold text-stone-800">鏡 | 好みの分析</p>
               <p className="text-xs text-stone-500">
                 {logs.length >= 5
                   ? '候補から、重視している条件や二人の違いを整理できます'
                   : `候補の見え方は今すぐ確認できます。あと${5 - logs.length}件でAI分析も使えます`}
               </p>
             </div>
-            <div className="font-brand flex items-center gap-2 rounded-full bg-stone-900 px-3 py-1.5 text-xs font-medium text-white">
+            <div className="font-brand flex items-center gap-2 rounded-full bg-[#3c3128] px-3 py-1.5 text-xs font-medium text-white">
               <TrendingUp className="size-3.5" />
               Open
             </div>
@@ -217,7 +217,7 @@ export default async function LogPage() {
         <Link
           href="/log/new"
           id="candidate-create-fab"
-          className="flex h-11 items-center gap-1.5 rounded-xl bg-stone-900 px-4 text-sm font-semibold text-white shadow-lg transition-all hover:bg-stone-800 active:scale-95"
+          className="flex h-11 items-center gap-1.5 rounded-xl bg-[#3c3128] px-4 text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#2f2620] active:scale-95"
         >
           <Plus className="size-4" strokeWidth={2} />
           候補を追加

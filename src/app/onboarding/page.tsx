@@ -33,7 +33,7 @@ export default async function OnboardingPage() {
                   First step
                 </p>
                 <h1
-                  className="mt-2 text-[1.9rem] font-bold tracking-tight text-stone-900"
+                  className="mt-2 text-[1.9rem] font-bold tracking-tight text-stone-800"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
                   まずは物件候補を1件追加しましょう

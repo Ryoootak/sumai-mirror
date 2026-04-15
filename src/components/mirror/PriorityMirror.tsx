@@ -125,7 +125,7 @@ function MirrorIllustration() {
 
 function InsightHeader({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
+    <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6a5848] shadow-sm">
       {icon}
       {label}
     </div>
@@ -161,7 +161,7 @@ function FeedbackBar({
             onClick={() => send('up')}
             className={cn(
               'inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm transition',
-              feedback === 'up' ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-50 text-stone-500 hover:bg-stone-100'
+              feedback === 'up' ? 'bg-amber-100 text-amber-800' : 'bg-stone-50 text-stone-500 hover:bg-stone-100'
             )}
           >
             <ThumbsUp className="size-3.5" /> 合ってる
@@ -170,7 +170,7 @@ function FeedbackBar({
             onClick={() => send('down')}
             className={cn(
               'inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm transition',
-              feedback === 'down' ? 'bg-rose-100 text-rose-700' : 'bg-stone-50 text-stone-500 hover:bg-stone-100'
+              feedback === 'down' ? 'bg-[#efe1d1] text-[#6a5848]' : 'bg-stone-50 text-stone-500 hover:bg-stone-100'
             )}
           >
             <ThumbsDown className="size-3.5" /> 違う
@@ -302,9 +302,9 @@ function Mirror1Card({
             </CardHeader>
             <CardContent className="flex min-h-32 flex-wrap gap-2">
               {badFreq.length > 0 ? badFreq.map((item) => (
-                <span key={item.tag} className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-sm font-medium text-rose-700">
+                <span key={item.tag} className="inline-flex items-center gap-2 rounded-full border border-[#e7d3bc] bg-[#fbf4ea] px-3 py-1.5 text-sm font-medium text-[#6a5848]">
                   {item.tag}
-                  <span className="text-xs font-bold text-rose-400">{item.count}</span>
+                  <span className="text-xs font-bold text-[#c47a2c]">{item.count}</span>
                 </span>
               )) : (
                 <p className="text-sm leading-7 text-stone-500">気になった点にタグを付けると、ここで傾向を見返せます。</p>
@@ -350,7 +350,7 @@ function Mirror1Card({
                 <Button onClick={run} disabled={loading} className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
                   {loading ? <><RefreshCw className="size-4 animate-spin" />分析中</> : <><Sparkles className="size-4" />AIで整理する</>}
                 </Button>
-                {error && <p className="text-sm text-rose-500">{error}</p>}
+                {error && <p className="text-sm text-[#b65e2a]">{error}</p>}
               </div>
               <MirrorIllustration />
             </div>
@@ -377,12 +377,12 @@ function Mirror1Card({
               {result.priorities?.map((p) => (
                 <Card key={p.rank}>
                   <CardContent className="flex items-start gap-4 p-5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-stone-900 text-sm font-semibold text-white">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#3c3128] text-sm font-semibold text-white">
                       {p.rank}
                     </div>
                     <div className="flex-1">
                       <div className="mb-2 flex items-center justify-between gap-3">
-                        <span className="font-semibold text-stone-900">{p.condition}</span>
+                        <span className="font-semibold text-stone-800">{p.condition}</span>
                         <span className="text-sm font-semibold text-amber-700">{p.matchRate}%</span>
                       </div>
                       <Progress value={p.matchRate} />
@@ -429,9 +429,9 @@ function Mirror1Card({
                   </CardHeader>
                   <CardContent className="flex flex-wrap gap-2">
                     {badFreq.map((item) => (
-                      <span key={item.tag} className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-sm font-medium text-rose-700">
+                      <span key={item.tag} className="inline-flex items-center gap-2 rounded-full border border-[#e7d3bc] bg-[#fbf4ea] px-3 py-1.5 text-sm font-medium text-[#6a5848]">
                         {item.tag}
-                        <span className="text-xs font-bold text-rose-400">{item.count}</span>
+                        <span className="text-xs font-bold text-[#c47a2c]">{item.count}</span>
                       </span>
                     ))}
                   </CardContent>
@@ -523,7 +523,7 @@ function Mirror2Card({
             <Button onClick={run} disabled={loading} className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
               {loading ? <><RefreshCw className="size-4 animate-spin" />分析中</> : <><GitCompare className="size-4" />二人を比べてみる</>}
             </Button>
-            {error && <p className="text-sm text-rose-500">{error}</p>}
+            {error && <p className="text-sm text-[#b65e2a]">{error}</p>}
           </CardContent>
         </Card>
       ) : (
@@ -545,7 +545,7 @@ function Mirror2Card({
               <CardContent className="space-y-3">
                 {result.agreements.map((a, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">✓</span>
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-800">✓</span>
                     <div>
                       <p className="text-sm font-semibold text-stone-800">{a.condition}</p>
                       <p className="text-xs text-stone-500 mt-0.5">{a.description}</p>
@@ -563,15 +563,15 @@ function Mirror2Card({
               </CardHeader>
               <CardContent className="space-y-4">
                 {result.gaps.map((g, i) => (
-                  <div key={i} className="rounded-2xl border border-stone-100 bg-stone-50 p-4 space-y-2">
+                  <div key={i} className="space-y-2 rounded-2xl border border-stone-200/80 bg-stone-50/80 p-4">
                     <p className="text-sm font-semibold text-stone-800">{g.topic}</p>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="rounded-xl bg-amber-50 px-3 py-2">
                         <p className="text-amber-700 font-medium mb-1">私</p>
                         <p className="text-stone-600">{g.my_tendency}</p>
                       </div>
-                      <div className="rounded-xl bg-sky-50 px-3 py-2">
-                        <p className="text-sky-700 font-medium mb-1">パートナー</p>
+                      <div className="rounded-xl bg-[#f5ede3] px-3 py-2">
+                        <p className="mb-1 font-medium text-[#6a5848]">パートナー</p>
                         <p className="text-stone-600">{g.partner_tendency}</p>
                       </div>
                     </div>
@@ -667,7 +667,7 @@ function Mirror3Card({
             <Button onClick={run} disabled={loading} className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
               {loading ? <><RefreshCw className="size-4 animate-spin" />分析中</> : <><History className="size-4" />変化を振り返る</>}
             </Button>
-            {error && <p className="text-sm text-rose-500">{error}</p>}
+            {error && <p className="text-sm text-[#b65e2a]">{error}</p>}
           </CardContent>
         </Card>
       ) : (
@@ -689,7 +689,7 @@ function Mirror3Card({
               <CardContent className="space-y-3">
                 {result.evolution.map((e, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <span className="shrink-0 rounded-full bg-stone-900 px-2.5 py-0.5 text-[10px] font-semibold text-white">{e.phase}</span>
+                    <span className="shrink-0 rounded-full bg-[#3c3128] px-2.5 py-0.5 text-[10px] font-semibold text-white">{e.phase}</span>
                     <p className="text-sm leading-6 text-stone-600">{e.tendency}</p>
                   </div>
                 ))}
@@ -701,11 +701,11 @@ function Mirror3Card({
             {result.narrowed_down?.length > 0 && (
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs text-emerald-700">絞られてきた条件</CardTitle>
+                  <CardTitle className="text-xs text-[#9a5b19]">絞られてきた条件</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-wrap gap-1.5 pt-0">
                   {result.narrowed_down.map((c, i) => (
-                    <span key={i} className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                    <span key={i} className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium text-[#9a5b19]">
                       {c}
                     </span>
                   ))}
@@ -763,7 +763,7 @@ export function PriorityMirror({
               <Sparkles className="size-3.5" />
               Mirror waiting
             </div>
-            <h3 className="mt-4 text-xl font-bold text-stone-900" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h3 className="mt-4 text-xl font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
               鏡はまだ眠っています
             </h3>
             <p className="mt-3 text-sm leading-7 text-stone-500">

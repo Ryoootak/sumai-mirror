@@ -32,7 +32,7 @@ export default async function NewLogPage() {
                   New candidate
                 </div>
                 <h1
-                  className="mt-4 text-[1.75rem] font-bold text-stone-900"
+                  className="mt-4 text-[1.75rem] font-bold text-stone-800"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
                   物件候補を追加する

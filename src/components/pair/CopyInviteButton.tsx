@@ -16,7 +16,7 @@ export function CopyInviteButton({ projectId }: { projectId: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="inline-flex items-center gap-2 rounded-2xl bg-stone-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-stone-800 active:scale-95 transition-all"
+      className="inline-flex items-center gap-2 rounded-2xl bg-[#3c3128] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#2f2620] active:scale-95"
     >
       {copied ? <Check className="size-4" /> : <Link2 className="size-4" />}
       {copied ? 'コピーしました！' : '招待リンクをコピー'}

@@ -40,7 +40,7 @@ export function StartProjectActions() {
         type="button"
         onClick={() => startProject('pair')}
         disabled={isPending}
-        className="h-12 w-full justify-between rounded-2xl bg-stone-900 px-5 text-left text-white hover:bg-stone-800"
+        className="h-12 w-full justify-between rounded-2xl bg-[#3c3128] px-5 text-left text-white hover:bg-[#2f2620]"
       >
         <span className="flex items-center gap-3">
           <Users className="size-4" />
@@ -64,7 +64,7 @@ export function StartProjectActions() {
       </Button>
 
       {error && (
-        <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+        <p className="rounded-2xl border border-[#efcfb0] bg-[#fbf1e5] px-4 py-3 text-sm text-[#b65e2a]">
           {error}
         </p>
       )}
