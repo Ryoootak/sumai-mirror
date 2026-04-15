@@ -1,7 +1,8 @@
 'use client'
 
 import { Suspense, useMemo, useState } from 'react'
-import { ArrowRight, LockKeyhole, Mail, ShieldCheck, UserRound } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, LockKeyhole, Mail, UserRound } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -38,20 +39,41 @@ function SignupPageContent() {
 
   if (done) {
     return (
-      <div className="w-full max-w-sm text-center space-y-5">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-amber-100 text-3xl">
-          📬
+      <div className="w-full max-w-md text-center space-y-5">
+        <div className="relative overflow-hidden rounded-[2rem] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(255,255,255,0.98))] px-6 pb-6 pt-8 shadow-[0_18px_50px_-30px_rgba(120,74,29,0.35)]">
+          <div className="pointer-events-none absolute inset-x-10 top-0 h-24 rounded-full bg-amber-200/30 blur-3xl" />
+          <div className="relative mx-auto flex max-w-[220px] justify-center">
+            <Image
+              src="/images/home_mirror.png"
+              alt="SUMAI MIRROR"
+              width={220}
+              height={150}
+              priority
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <div className="relative mt-4 space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-700/80">
+              Welcome aboard
+            </p>
+            <h2
+              className="text-2xl font-bold text-stone-800"
+              style={{ fontFamily: 'var(--font-serif)' }}
+            >
+              確認メールを送信しました
+            </h2>
+            <p className="mx-auto max-w-xs text-sm leading-relaxed text-stone-500">
+              <span className="font-medium text-stone-700">{email}</span> に届いたリンクを開くと、
+              すぐに記録を始められます。
+            </p>
+          </div>
         </div>
         <div>
           <h2
-            className="text-xl font-bold text-stone-800"
-            style={{ fontFamily: 'var(--font-serif)' }}
+            className="text-base font-semibold text-stone-700"
           >
-            確認メールを送信しました
+            メールが見つからない場合は迷惑メールも確認してください
           </h2>
-          <p className="mt-2 text-sm text-stone-500 leading-relaxed">
-            <span className="font-medium text-stone-700">{email}</span> に届いたリンクをクリックして<br />登録を完了してください。
-          </p>
         </div>
         <Link
           href="/login"
@@ -64,22 +86,35 @@ function SignupPageContent() {
   }
 
   return (
-    <div className="w-full max-w-sm space-y-8">
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 mb-2 shadow-sm">
-          <span className="text-2xl">🏠</span>
+    <div className="w-full max-w-md space-y-8">
+      <div className="text-center space-y-5">
+        <div className="relative overflow-hidden rounded-[2rem] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(255,255,255,0.98))] px-6 pb-6 pt-8 shadow-[0_18px_50px_-30px_rgba(120,74,29,0.35)]">
+          <div className="pointer-events-none absolute inset-x-10 top-0 h-24 rounded-full bg-amber-200/30 blur-3xl" />
+          <div className="relative mx-auto flex max-w-[220px] justify-center">
+            <Image
+              src="/images/home_mirror.png"
+              alt="SUMAI MIRROR"
+              width={220}
+              height={150}
+              priority
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <div className="relative mt-4 space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-700/80">
+              Create account
+            </p>
+            <h1
+              className="text-3xl font-bold tracking-tight text-stone-800"
+              style={{ fontFamily: 'var(--font-serif)' }}
+            >
+              SUMAI MIRROR
+            </h1>
+            <p className="mx-auto max-w-xs text-sm leading-relaxed text-stone-500">
+              二人の家探しを、静かに整った記録から始めましょう。
+            </p>
+          </div>
         </div>
-        <div className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
-          <ShieldCheck className="size-3.5" />
-          Create account
-        </div>
-        <h1
-          className="text-2xl font-bold tracking-tight text-stone-800"
-          style={{ fontFamily: 'var(--font-serif)' }}
-        >
-          SUMAI MIRROR
-        </h1>
-        <p className="text-sm text-stone-500">一緒に家探しを始めよう</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -135,7 +170,7 @@ function SignupPageContent() {
         <Button
           type="submit"
           disabled={loading}
-          className="h-12 w-full rounded-2xl bg-amber-500 text-base font-semibold text-white shadow-sm transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
+          className="h-12 w-full rounded-2xl bg-amber-500 text-base font-semibold text-white shadow-[0_12px_30px_-18px_rgba(217,119,6,0.8)] transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
         >
           <ArrowRight className="size-4" />
           {loading ? '登録中...' : 'アカウントを作成'}

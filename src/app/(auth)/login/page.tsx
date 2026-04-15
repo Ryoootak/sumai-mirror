@@ -1,7 +1,8 @@
 'use client'
 
 import { Suspense, useMemo, useState } from 'react'
-import { ArrowRight, LockKeyhole, Mail, ShieldCheck } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, LockKeyhole, Mail } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -33,22 +34,35 @@ function LoginPageContent() {
   }
 
   return (
-    <div className="w-full max-w-sm space-y-8">
-      <div className="space-y-3 text-center">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 mb-2 shadow-sm">
-          <span className="text-2xl">🏠</span>
+    <div className="w-full max-w-md space-y-8">
+      <div className="space-y-5 text-center">
+        <div className="relative overflow-hidden rounded-[2rem] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(255,255,255,0.98))] px-6 pb-6 pt-8 shadow-[0_18px_50px_-30px_rgba(120,74,29,0.35)]">
+          <div className="pointer-events-none absolute inset-x-10 top-0 h-24 rounded-full bg-amber-200/30 blur-3xl" />
+          <div className="relative mx-auto flex max-w-[220px] justify-center">
+            <Image
+              src="/images/home_mirror.png"
+              alt="SUMAI MIRROR"
+              width={220}
+              height={150}
+              priority
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <div className="relative mt-4 space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-amber-700/80">
+              Property journal
+            </p>
+            <h1
+              className="text-3xl font-bold tracking-tight text-stone-800"
+              style={{ fontFamily: 'var(--font-serif)' }}
+            >
+              SUMAI MIRROR
+            </h1>
+            <p className="mx-auto max-w-xs text-sm leading-relaxed text-stone-500">
+              家探しの記録を静かに整えて、二人の判断材料を気持ちよく残せます。
+            </p>
+          </div>
         </div>
-        <div className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
-          <ShieldCheck className="size-3.5" />
-          Secure sign in
-        </div>
-        <h1
-          className="text-2xl font-bold tracking-tight text-stone-800"
-          style={{ fontFamily: 'var(--font-serif)' }}
-        >
-          SUMAI MIRROR
-        </h1>
-        <p className="text-sm text-stone-500">家探しの「好み」を映す鏡</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -93,7 +107,7 @@ function LoginPageContent() {
         <Button
           type="submit"
           disabled={loading}
-          className="h-12 w-full rounded-2xl bg-amber-500 text-base font-semibold text-white shadow-sm transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
+          className="h-12 w-full rounded-2xl bg-amber-500 text-base font-semibold text-white shadow-[0_12px_30px_-18px_rgba(217,119,6,0.8)] transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
         >
           <ArrowRight className="size-4" />
           {loading ? 'ログイン中...' : 'ログイン'}
