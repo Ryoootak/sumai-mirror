@@ -79,12 +79,6 @@ export default async function LogPage() {
                 </p>
               </div>
             </div>
-            <Link href="/log/new">
-              <Button className="h-11 rounded-xl bg-amber-500 px-4 text-white hover:bg-amber-600">
-                <Plus className="size-4" />
-                記録する
-              </Button>
-            </Link>
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-3">
@@ -230,9 +224,9 @@ export default async function LogPage() {
       <div className="fixed bottom-20 right-4">
         <Link
           href="/log/new"
-          className="flex items-center gap-2 rounded-full bg-stone-900 px-5 py-4 font-semibold text-white shadow-lg transition-all hover:bg-stone-800 active:scale-95"
+          className="flex h-11 items-center gap-1.5 rounded-xl bg-stone-900 px-4 text-sm font-semibold text-white shadow-lg transition-all hover:bg-stone-800 active:scale-95"
         >
-          <Plus className="size-5" strokeWidth={2} />
+          <Plus className="size-4" strokeWidth={2} />
           記録する
         </Link>
       </div>
