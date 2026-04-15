@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -20,7 +21,15 @@ export default async function SettingsPage() {
     <div className="pb-28">
       <header className="px-5 pb-6 pt-10">
         <Card className="overflow-hidden border-stone-200/80 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
-          <CardContent className="p-6">
+          <CardContent className="relative p-6">
+            <Image
+              src="/images/setting.png"
+              alt=""
+              width={80}
+              height={80}
+              className="absolute right-4 top-1/2 -translate-y-1/2 opacity-90 select-none pointer-events-none drop-shadow-sm"
+              priority
+            />
             <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 shadow-sm">
               <Settings2 className="size-3.5 text-amber-500" />
               Profile settings
