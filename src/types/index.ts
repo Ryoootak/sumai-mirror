@@ -3,8 +3,9 @@
 // ============================================================
 
 export type ProjectStatus = 'active' | 'completed' | 'paused'
+export type PropertyType = 'mansion' | 'house' | 'land'
 export type ProjectRole = 'owner' | 'partner'
-export type PartnerReaction = 'great' | 'good' | 'neutral' | 'bad' | 'unknown'
+export type PartnerReaction = 'best' | 'good' | 'okay' | 'unknown'
 export type AnalysisType = 'priority' | 'alignment' | 'timeline'
 export type AnalysisFeedback = 'up' | 'down'
 
@@ -35,11 +36,15 @@ export interface PropertyLog {
   url: string | null
   title: string | null
   price: string | null
+  property_type: PropertyType | null
   score: number
   tags_good: string[]
   tags_bad: string[]
   memo: string | null
+  // パートナーが自分で入力するフィールド（非登録者のみ更新可）
+  partner_score: number | null
   partner_reaction: PartnerReaction
+  partner_comment: string | null
   created_at: string
 }
 
@@ -61,14 +66,21 @@ export interface OgpData {
   price: string | null
 }
 
-// Form state for PropertyLogForm
+// Form state for PropertyLogForm（登録者自身の評価のみ）
 export interface PropertyLogFormData {
   url: string
   title: string
   price: string
+  property_type: PropertyType | null
   score: number
   tags_good: string[]
   tags_bad: string[]
   memo: string
+}
+
+// Form state for PartnerReactionForm（パートナーが入力）
+export interface PartnerReactionFormData {
+  partner_score: number
   partner_reaction: PartnerReaction
+  partner_comment: string
 }
