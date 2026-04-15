@@ -47,8 +47,8 @@ export default async function SettingsPage() {
 
       <main className="px-5 space-y-6">
         {/* Profile */}
-        <section className="rounded-3xl bg-white border border-stone-100 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider">アカウント</p>
+        <section className="rounded-3xl bg-white border border-stone-100 shadow-sm p-5">
+          <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">アカウント</p>
           <ProfileForm
             userId={user.id}
             initialName={profile?.name ?? ''}
