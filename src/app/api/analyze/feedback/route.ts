@@ -6,15 +6,14 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { projectId, feedback } = await req.json()
+  const { projectId, feedback, type = 'priority' } = await req.json()
 
-  // Update the latest analysis feedback
   const { data: analysis } = await supabase
     .from('analyses')
     .select('id')
     .eq('project_id', projectId)
     .eq('user_id', user.id)
-    .eq('type', 'priority')
+    .eq('type', type)
     .order('created_at', { ascending: false })
     .limit(1)
     .single()

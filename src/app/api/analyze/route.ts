@@ -1,7 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 import type { PropertyLog } from '@/types'
+
+const SCORE_LABEL: Record<number, string> = { 3: '最高', 2: 'いいな', 1: 'ありかな' }
+const TYPE_LABEL: Record<string, string> = { mansion: 'マンション', house: '戸建て', land: '土地' }
+
+function formatLogs(logs: PropertyLog[]): string {
+  return logs.map((l, i) => {
+    const score    = SCORE_LABEL[l.score] ?? `スコア${l.score}`
+    const type     = l.property_type ? `種別: ${TYPE_LABEL[l.property_type]}` : ''
+    const goodTags = l.tags_good.length ? `良かった点: ${l.tags_good.join('、')}` : ''
+    const badTags  = l.tags_bad.length  ? `気になった点: ${l.tags_bad.join('、')}` : ''
+    const memo     = l.memo ? `メモ: ${l.memo}` : ''
+    return [
+      `【物件${i + 1}】${l.title ?? '名称未設定'} / 評価: ${score}`,
+      type, goodTags, badTags, memo,
+    ].filter(Boolean).join('\n')
+  }).join('\n\n')
+}
 
 export async function POST(req: NextRequest) {
   const supabase = createClient()
@@ -15,7 +32,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
 
-  // Verify membership
+  // メンバー確認
   const { data: membership } = await supabase
     .from('project_members')
     .select('role')
@@ -24,7 +41,7 @@ export async function POST(req: NextRequest) {
     .single()
   if (!membership) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
-  // Get logs
+  // ログ取得
   const { data: logsRaw } = await supabase
     .from('property_logs')
     .select('*')
@@ -36,55 +53,51 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'ログが5件以上必要です' }, { status: 422 })
   }
 
-  // Format logs for AI
-  const logsText = logs.map((l, i) => {
-    const goodTags = l.tags_good.length ? `良かった点: ${l.tags_good.join('、')}` : ''
-    const badTags  = l.tags_bad.length  ? `気になった点: ${l.tags_bad.join('、')}` : ''
-    const memo     = l.memo ? `メモ: ${l.memo}` : ''
-    return [
-      `【物件${i + 1}】${l.title ?? '名称未設定'} / スコア: ${l.score}/5`,
-      goodTags, badTags, memo
-    ].filter(Boolean).join('\n')
-  }).join('\n\n')
+  const logsText = formatLogs(logs)
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const prompt = `あなたは住まい選びの行動分析の専門家です。
+ユーザーが記録した物件ログを読み、言葉ではなく行動から本当の優先度を見抜いてください。
 
-  const message = await client.messages.create({
-    model: 'claude-opus-4-6',
-    max_tokens: 1024,
-    messages: [
-      {
-        role: 'user',
-        content: `あなたは家探しのカウンセラーです。以下はユーザーが記録した物件への反応ログです。
+## 評価スケール
+「最高」＞「いいな」＞「ありかな」の3段階です。
+全件がポジティブな記録なので、「最高」と「ありかな」のギャップが核心です。
 
+## ログデータ
 ${logsText}
 
-このデータを分析して、このユーザーが「本当に重視している条件」TOP5を優先度順に教えてください。
+## 分析の視点（必ず守ること）
+1. 「最高」評価の物件に共通するタグ・表現 → 無意識の絶対条件
+2. 「最高」と「ありかな」で同じタグがついている場合 → そのタグは差別化要因ではない、除外する
+3. 「ありかな」物件のメモに「でも」「けど」「が…」などの逆接がある場合 → 何かを我慢している
+4. 条件は抽象的にせず具体的に（「広さ」ではなく「リビングの開放感・採光」のように）
+5. 物件種別（マンション/戸建て/土地）の内訳と、高評価に偏りがある場合はその傾向も読み取る
 
-重要な分析の視点：
-- ユーザーが「言っている」優先度ではなく、高スコアの物件に共通する特徴から「やっている」優先度を見つける
-- 低スコアの物件に共通する不満点から、実は重視している条件を逆算する
-- 温かく、背中を押すようなトーンで
-
-以下のJSON形式のみで回答してください（説明は不要）：
+## 出力形式（JSONのみ。前後の説明文不要）
 {
   "priorities": [
     {
       "rank": 1,
-      "condition": "条件名（短く）",
-      "reason": "なぜこれが重要だと判断したか（1〜2文、具体的に）",
+      "condition": "条件名（12文字以内）",
+      "reason": "なぜこう判断したか。物件名や評価を引用して具体的に（2文）",
       "matchRate": 85
     }
   ],
-  "insight": "全体的な洞察を1〜2文で。ユーザーへの語りかけ形式で（例：「あなたは〜を大切にしているようです」）"
-}`,
-      },
-    ],
-  })
+  "insight": "全体的な傾向をユーザーへの語りかけで2〜3文。発見した矛盾や無意識の癖を温かく伝える。"
+}`
 
-  const responseText = message.content[0].type === 'text' ? message.content[0].text : ''
+  const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!)
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
-  // Parse JSON from response
+  let responseText: string
+  try {
+    const result = await model.generateContent(prompt)
+    responseText = result.response.text()
+  } catch (e) {
+    console.error('Gemini error:', e)
+    return NextResponse.json({ error: 'AI分析に失敗しました' }, { status: 500 })
+  }
+
+  // JSONパース
   let analysisResult
   try {
     const jsonMatch = responseText.match(/\{[\s\S]*\}/)
@@ -95,7 +108,7 @@ ${logsText}
     return NextResponse.json({ error: 'AI応答の解析に失敗しました' }, { status: 500 })
   }
 
-  // Save to analyses table
+  // DB保存
   await supabase.from('analyses').insert({
     project_id: projectId,
     user_id: user.id,
