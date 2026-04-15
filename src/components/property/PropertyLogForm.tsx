@@ -4,42 +4,88 @@ import { useState, useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
-import type { OgpData, PartnerReaction, PropertyLogFormData } from '@/types'
+import type { OgpData, PropertyLog, PropertyLogFormData, PropertyType } from '@/types'
 
-// ── Constants ──────────────────────────────────────────────
+// ── タグ定義 ───────────────────────────────────────────────
 
-const TAGS_GOOD = ['日当たり', '広さ', '収納', '立地', '価格', 'デザイン', '天井高', '設備', '静けさ', '眺望'] as const
-const TAGS_BAD  = ['駅から遠い', '価格が高い', '収納が少ない', '日当たり弱い', '狭い', '古い', '騒音', '管理費'] as const
+const TAGS_GOOD_COMMON = [
+  '日当たり・採光', '広さ・ゆとり', '駅・交通の便', '買い物・生活環境',
+  '教育・学区環境', '静かな住環境', '自然・緑が多い', '治安の良さ', '価格・コスパ',
+] as const
 
-const PARTNER_OPTIONS: { value: PartnerReaction; label: string; desc: string; activeClass: string }[] = [
-  { value: 'great',   label: '◎', desc: 'すごくいい', activeClass: 'bg-emerald-500 text-white border-emerald-500' },
-  { value: 'good',    label: '○', desc: 'いい',       activeClass: 'bg-sky-500 text-white border-sky-500' },
-  { value: 'neutral', label: '△', desc: '微妙',       activeClass: 'bg-amber-400 text-white border-amber-400' },
-  { value: 'bad',     label: '×', desc: 'ダメ',       activeClass: 'bg-rose-500 text-white border-rose-500' },
-  { value: 'unknown', label: '―', desc: '未確認',     activeClass: 'bg-stone-400 text-white border-stone-400' },
+const TAGS_BAD_COMMON = [
+  '駅・交通が不便', '買い物・生活環境が弱い', '学区・教育環境が不安',
+  '騒音・振動', '交通量が多い', '治安が不安', '日当たりが弱い',
+  '狭さが気になる', 'ハザード・水害リスク', '地盤が不安', '価格が高い',
+] as const
+
+const TAGS_GOOD_BY_TYPE: Record<PropertyType, readonly string[]> = {
+  mansion: ['天井高・開放感', '眺望', '収納の充実', '設備の新しさ', 'デザイン・外観', '管理体制', '共用施設', 'セキュリティ', '築浅'],
+  house:   ['庭・外構', '駐車スペース', '間取り', '収納の充実', 'デザイン・外観', '性能', '築浅'],
+  land:    ['広さ・形状の良さ', '接道の良さ', '更地・即建築可', '日影が少ない', '坂・高低差なし'],
+}
+
+const TAGS_BAD_BY_TYPE: Record<PropertyType, readonly string[]> = {
+  mansion: ['管理費・修繕積立が高い', '階数・向きが惜しい', '収納が少ない', '設備が古い', '管理体制が不安', '築年数が気になる'],
+  house:   ['庭・外構が狭い', '駐車スペースなし', '維持費・修繕が不安', '築年数が気になる'],
+  land:    ['形状が使いにくい', '接道が狭い・悪い', '用途・建築制限', '日影・斜線制限', '造成・整地が必要', '高低差・傾斜あり'],
+}
+
+const PROPERTY_TYPE_OPTIONS: { value: PropertyType; label: string }[] = [
+  { value: 'mansion', label: 'マンション' },
+  { value: 'house',   label: '戸建て' },
+  { value: 'land',    label: '土地' },
 ]
+
+const SCORE_OPTIONS = [
+  { value: 3, label: '最高',    sub: 'ぜひ検討したい', activeClass: 'border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-200' },
+  { value: 2, label: 'いいな',  sub: 'いい感じ',       activeClass: 'border-amber-300 bg-amber-50 text-amber-700 shadow-sm' },
+  { value: 1, label: 'ありかな', sub: '悪くない',      activeClass: 'border-stone-300 bg-stone-50 text-stone-600 shadow-sm' },
+] as const
 
 // ── Sub-components ─────────────────────────────────────────
 
-function StarScore({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+function TypeSelect({ value, onChange }: { value: PropertyType | null; onChange: (v: PropertyType) => void }) {
   return (
-    <div className="flex gap-3" role="radiogroup" aria-label="スコア">
-      {[1, 2, 3, 4, 5].map((s) => (
+    <div className="grid grid-cols-3 gap-3" role="radiogroup" aria-label="物件タイプ">
+      {PROPERTY_TYPE_OPTIONS.map((opt) => (
         <button
-          key={s}
+          key={opt.value}
           type="button"
-          role="radio"
-          aria-checked={value === s}
-          onClick={() => onChange(s)}
+          onClick={() => onChange(opt.value)}
           className={cn(
-            'flex h-16 w-16 items-center justify-center rounded-2xl border-2 text-3xl transition-all duration-150 active:scale-90',
-            s <= value
-              ? 'border-amber-400 bg-amber-400 text-white shadow-md shadow-amber-200'
-              : 'border-stone-200 bg-white text-stone-200 hover:border-amber-200 hover:text-amber-200'
+            'flex flex-col items-center gap-1.5 rounded-2xl border-2 py-4 transition-all duration-150 active:scale-95',
+            value === opt.value
+              ? 'border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-200'
+              : 'border-stone-200 bg-white text-stone-400 hover:border-stone-300'
           )}
-          aria-label={`${s}点`}
         >
-          ★
+          <span className={cn('text-sm font-semibold', value === opt.value ? '' : 'text-stone-500')}>
+            {opt.label}
+          </span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function ScoreSelect({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  return (
+    <div className="grid grid-cols-3 gap-3" role="radiogroup" aria-label="評価">
+      {SCORE_OPTIONS.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={cn(
+            'flex flex-col items-center gap-1 rounded-2xl border-2 py-4 transition-all duration-150 active:scale-95',
+            value === opt.value
+              ? opt.activeClass
+              : 'border-stone-200 bg-white hover:border-stone-300'
+          )}
+        >
+          <span className={cn('text-base font-bold', value === opt.value ? '' : 'text-stone-400')}>{opt.label}</span>
+          <span className={cn('text-[10px]', value === opt.value ? 'opacity-80' : 'text-stone-300')}>{opt.sub}</span>
         </button>
       ))}
     </div>
@@ -47,10 +93,7 @@ function StarScore({ value, onChange }: { value: number; onChange: (v: number) =
 }
 
 function TagPills({
-  tags,
-  selected,
-  onChange,
-  variant,
+  tags, selected, onChange, variant,
 }: {
   tags: readonly string[]
   selected: string[]
@@ -63,7 +106,6 @@ function TagPills({
   const activeClass = variant === 'good'
     ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
     : 'bg-rose-500 text-white border-rose-500 shadow-sm'
-  const inactiveClass = 'bg-white text-stone-500 border-stone-200 hover:border-stone-300'
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -73,8 +115,8 @@ function TagPills({
           type="button"
           onClick={() => toggle(tag)}
           className={cn(
-            'rounded-full border px-4 py-2 text-sm font-medium transition-all duration-150 active:scale-95',
-            selected.includes(tag) ? activeClass : inactiveClass
+            'rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-150 active:scale-95',
+            selected.includes(tag) ? activeClass : 'bg-white text-stone-500 border-stone-200 hover:border-stone-300'
           )}
         >
           {tag}
@@ -115,22 +157,46 @@ const DEFAULT: PropertyLogFormData = {
   url: '',
   title: '',
   price: '',
+  property_type: null,
   score: 0,
   tags_good: [],
   tags_bad: [],
   memo: '',
-  partner_reaction: 'unknown',
 }
 
-export function PropertyLogForm({ projectId }: { projectId: string }) {
+interface PropertyLogFormProps {
+  projectId: string
+  initialData?: PropertyLog
+  mode?: 'create' | 'edit'
+}
+
+export function PropertyLogForm({ projectId, initialData, mode = 'create' }: PropertyLogFormProps) {
   const router = useRouter()
   const [isPending, start] = useTransition()
-  const [form, setForm] = useState<PropertyLogFormData>(DEFAULT)
+  const [form, setForm] = useState<PropertyLogFormData>(
+    initialData
+      ? {
+          url: initialData.url ?? '',
+          title: initialData.title ?? '',
+          price: initialData.price ?? '',
+          property_type: initialData.property_type,
+          score: initialData.score,
+          tags_good: initialData.tags_good,
+          tags_bad: initialData.tags_bad,
+          memo: initialData.memo ?? '',
+        }
+      : DEFAULT
+  )
   const [submitError, setSubmitError] = useState<string | null>(null)
   const { fetch_, loading: ogpLoading, error: ogpError } = useOgp()
 
   const set = <K extends keyof PropertyLogFormData>(k: K, v: PropertyLogFormData[K]) =>
     setForm((p) => ({ ...p, [k]: v }))
+
+  const handleTypeChange = (type: PropertyType) => {
+    // タイプ変更時はタグをリセット
+    setForm((p) => ({ ...p, property_type: type, tags_good: [], tags_bad: [] }))
+  }
 
   const handleUrlBlur = async () => {
     if (!form.url) return
@@ -152,36 +218,75 @@ export function PropertyLogForm({ projectId }: { projectId: string }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (form.score === 0) { setSubmitError('スコアを選択してください'); return }
+    if (!form.property_type) { setSubmitError('物件タイプを選択してください'); return }
+    if (form.score === 0) { setSubmitError('評価を選択してください'); return }
     setSubmitError(null)
 
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/login'); return }
 
-    const { error } = await supabase.from('property_logs').insert({
-      project_id: projectId,
-      user_id: user.id,
+    const payload = {
       url: form.url || null,
       title: form.title || null,
       price: form.price || null,
+      property_type: form.property_type,
       score: form.score,
       tags_good: form.tags_good,
       tags_bad: form.tags_bad,
       memo: form.memo || null,
-      partner_reaction: form.partner_reaction,
-    })
+    }
+
+    let error
+    if (mode === 'edit' && initialData) {
+      ;({ error } = await supabase
+        .from('property_logs')
+        .update(payload)
+        .eq('id', initialData.id)
+        .eq('user_id', user.id))
+    } else {
+      ;({ error } = await supabase.from('property_logs').insert({
+        ...payload,
+        project_id: projectId,
+        user_id: user.id,
+      }))
+    }
 
     if (error) { setSubmitError(error.message); return }
 
+    const dest = mode === 'edit' && initialData ? `/log/${initialData.id}` : '/log'
     start(() => {
-      router.push('/log')
+      router.push(dest)
       router.refresh()
     })
   }
 
+  // タイプに応じたタグセット
+  const tagsGood = form.property_type
+    ? [...TAGS_GOOD_COMMON, ...TAGS_GOOD_BY_TYPE[form.property_type]]
+    : [...TAGS_GOOD_COMMON]
+  const tagsBad = form.property_type
+    ? [...TAGS_BAD_COMMON, ...TAGS_BAD_BY_TYPE[form.property_type]]
+    : [...TAGS_BAD_COMMON]
+
   return (
     <form onSubmit={handleSubmit} className="space-y-8 pb-12">
+
+      {/* 物件タイプ */}
+      <section className="rounded-3xl bg-white border border-stone-100 shadow-sm p-5 space-y-4">
+        <div>
+          <label className="block text-sm font-semibold text-stone-700">
+            物件タイプ <span className="text-rose-400">*</span>
+          </label>
+          <p className="text-xs text-stone-400 mt-0.5">どんな物件を見ましたか？</p>
+        </div>
+        <TypeSelect value={form.property_type} onChange={handleTypeChange} />
+        {form.property_type === 'land' && (
+          <p className="text-xs text-amber-600 bg-amber-50 rounded-xl px-3 py-2">
+            土地はポテンシャルで評価してください。建てたあとを想像しながら記録しましょう。
+          </p>
+        )}
+      </section>
 
       {/* URL */}
       <section className="space-y-3">
@@ -196,7 +301,7 @@ export function PropertyLogForm({ projectId }: { projectId: string }) {
           placeholder="https://suumo.jp/..."
           className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
         />
-        {ogpLoading && <p className="text-sm text-amber-600 flex items-center gap-1.5">⏳ 物件情報を取得中...</p>}
+        {ogpLoading && <p className="text-sm text-amber-600">⏳ 物件情報を取得中...</p>}
         {ogpError && <p className="text-sm text-stone-400">{ogpError}</p>}
       </section>
 
@@ -224,31 +329,21 @@ export function PropertyLogForm({ projectId }: { projectId: string }) {
         </div>
       </section>
 
-      {/* Score — most important UI */}
+      {/* Score */}
       <section className="rounded-3xl bg-white border border-stone-100 shadow-sm p-5 space-y-4">
         <div>
           <label className="block text-sm font-semibold text-stone-700">
-            直感スコア <span className="text-rose-400">*</span>
+            直感評価 <span className="text-rose-400">*</span>
           </label>
           <p className="text-xs text-stone-400 mt-0.5">この物件、全体的にどうでしたか？</p>
         </div>
-        <StarScore value={form.score} onChange={(v) => set('score', v)} />
-        {form.score > 0 && (
-          <p className="text-sm font-medium text-amber-600">
-            {['', '気になる点が多い', 'まずまず', 'いい感じ', 'かなりいい！', '最高！ぜひ検討したい'][form.score]}
-          </p>
-        )}
+        <ScoreSelect value={form.score} onChange={(v) => set('score', v)} />
       </section>
 
       {/* Good tags */}
       <section className="space-y-3">
         <label className="block text-sm font-semibold text-stone-700">良かった点</label>
-        <TagPills
-          tags={TAGS_GOOD}
-          selected={form.tags_good}
-          onChange={(v) => set('tags_good', v)}
-          variant="good"
-        />
+        <TagPills tags={tagsGood} selected={form.tags_good} onChange={(v) => set('tags_good', v)} variant="good" />
         <input
           type="text"
           placeholder="その他を追加（Enterで確定）"
@@ -276,12 +371,7 @@ export function PropertyLogForm({ projectId }: { projectId: string }) {
       {/* Bad tags */}
       <section className="space-y-3">
         <label className="block text-sm font-semibold text-stone-700">気になった点</label>
-        <TagPills
-          tags={TAGS_BAD}
-          selected={form.tags_bad}
-          onChange={(v) => set('tags_bad', v)}
-          variant="bad"
-        />
+        <TagPills tags={tagsBad} selected={form.tags_bad} onChange={(v) => set('tags_bad', v)} variant="bad" />
         <input
           type="text"
           placeholder="その他を追加（Enterで確定）"
@@ -320,31 +410,6 @@ export function PropertyLogForm({ projectId }: { projectId: string }) {
         />
       </section>
 
-      {/* Partner reaction */}
-      <section className="rounded-3xl bg-white border border-stone-100 shadow-sm p-5 space-y-3">
-        <label className="block text-sm font-semibold text-stone-700">
-          パートナーの反応 <span className="font-normal text-stone-400">（任意）</span>
-        </label>
-        <div className="grid grid-cols-5 gap-2">
-          {PARTNER_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => set('partner_reaction', opt.value)}
-              className={cn(
-                'flex flex-col items-center gap-1 rounded-2xl border-2 py-3 text-lg font-bold transition-all active:scale-95',
-                form.partner_reaction === opt.value
-                  ? opt.activeClass
-                  : 'border-stone-200 bg-white text-stone-300'
-              )}
-            >
-              {opt.label}
-              <span className="text-[9px] font-normal leading-none opacity-70">{opt.desc}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
       {submitError && (
         <div className="rounded-2xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-600">
           {submitError}
@@ -356,7 +421,7 @@ export function PropertyLogForm({ projectId }: { projectId: string }) {
         disabled={isPending || ogpLoading}
         className="w-full rounded-2xl bg-amber-500 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60"
       >
-        {isPending ? '保存中...' : '記録する'}
+        {isPending ? '保存中...' : mode === 'edit' ? '保存する' : '記録する'}
       </button>
     </form>
   )
