@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 import type { PropertyLog } from '@/types'
 
-const SCORE_LABEL: Record<number, string> = { 3: '最高', 2: 'いいな', 1: 'ありかな' }
+const SCORE_LABEL: Record<number, string> = { 3: 'かなりいい', 2: 'いいな', 1: 'ありかな' }
 const TYPE_LABEL: Record<string, string> = { mansion: 'マンション', house: '戸建て', land: '土地' }
 
 function formatLogs(logs: PropertyLog[]): string {
@@ -18,6 +18,22 @@ function formatLogs(logs: PropertyLog[]): string {
       type, goodTags, badTags, memo,
     ].filter(Boolean).join('\n')
   }).join('\n\n')
+}
+
+function formatPreferences(preferences: Record<string, unknown> | null | undefined): string {
+  if (!preferences) return '未設定'
+
+  const entries = [
+    ['希望エリア', preferences.area],
+    ['予算感', preferences.budget],
+    ['広さ・間取り', preferences.layout],
+    ['外せない条件', preferences.must_have],
+    ['避けたい条件', preferences.avoid],
+  ].filter(([, value]) => typeof value === 'string' && value.trim().length > 0)
+
+  if (entries.length === 0) return '未設定'
+
+  return entries.map(([label, value]) => `${label}: ${String(value)}`).join('\n')
 }
 
 export async function POST(req: NextRequest) {
@@ -54,23 +70,34 @@ export async function POST(req: NextRequest) {
   }
 
   const logsText = formatLogs(logs)
+  const { data: profile } = await supabase
+    .from('users_profile')
+    .select('preferences')
+    .eq('id', user.id)
+    .single()
+  const preferencesText = formatPreferences((profile?.preferences ?? null) as Record<string, unknown> | null)
 
   const prompt = `あなたは住まい選びの行動分析の専門家です。
 ユーザーが追加した物件候補を読み、言葉ではなく行動から重視している条件を見抜いてください。
 
 ## 評価スケール
-「最高」＞「いいな」＞「ありかな」の3段階です。
-全件がポジティブな記録なので、「最高」と「ありかな」のギャップが核心です。
+「かなりいい」＞「いいな」＞「ありかな」の3段階です。
+全件がポジティブな記録なので、「かなりいい」と「ありかな」のギャップが核心です。
+
+## 設定タブの希望条件
+${preferencesText}
 
 ## ログデータ
 ${logsText}
 
 ## 分析の視点（必ず守ること）
-1. 「最高」評価の物件に共通するタグ・表現 → 無意識の絶対条件
-2. 「最高」と「ありかな」で同じタグがついている場合 → そのタグは差別化要因ではない、除外する
+1. 「かなりいい」評価の物件に共通するタグ・表現 → 無意識の絶対条件
+2. 「かなりいい」と「ありかな」で同じタグがついている場合 → そのタグは差別化要因ではない、除外する
 3. 「ありかな」物件のメモに「でも」「けど」「が…」などの逆接がある場合 → 何かを我慢している
 4. 条件は抽象的にせず具体的に（「広さ」ではなく「リビングの開放感・採光」のように）
 5. 物件種別（マンション/戸建て/土地）の内訳と、高評価に偏りがある場合はその傾向も読み取る
+6. 設定タブの希望条件と、実際の行動ログが一致している点・ズレている点の両方を見る
+7. ユーザーが言語化している希望条件より、実際の行動でより強く出ている条件があれば優先して書く
 
 ## 出力形式（JSONのみ。前後の説明文不要）
 {
@@ -78,11 +105,11 @@ ${logsText}
     {
       "rank": 1,
       "condition": "条件名（12文字以内）",
-      "reason": "なぜこう判断したか。物件名や評価を引用して具体的に（2文）",
+      "reason": "なぜこう判断したか。物件名や評価を引用して具体的に（3〜4文）",
       "matchRate": 85
     }
   ],
-  "insight": "全体的な傾向をユーザーへの語りかけで2〜3文。発見した矛盾や無意識の癖を温かく伝える。"
+  "insight": "全体的な傾向をユーザーへの語りかけで4〜6文。設定条件との一致やズレ、無意識の癖、次に見るべき視点まで含めて、温かく具体的に伝える。"
 }`
 
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!)

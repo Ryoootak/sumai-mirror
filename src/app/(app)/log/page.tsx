@@ -96,7 +96,7 @@ export default async function LogPage() {
             </Card>
             <Card className="border-stone-200/70 bg-white/90 shadow-none">
               <CardContent className="p-4">
-                <p className="text-[11px] font-medium tracking-[0.08em] text-stone-400">最高評価</p>
+                <p className="text-[11px] font-medium tracking-[0.08em] text-stone-400">かなりいい</p>
                 <p className="mt-2 text-2xl font-semibold text-[#9a5b19]">{highScoreCount}</p>
               </CardContent>
             </Card>

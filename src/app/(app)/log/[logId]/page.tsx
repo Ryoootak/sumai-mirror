@@ -9,14 +9,14 @@ import { PartnerReactionForm } from '@/components/property/PartnerReactionForm'
 import { Card, CardContent } from '@/components/ui/card'
 
 const PARTNER_LABEL: Record<PartnerReaction, { label: string; className: string }> = {
-  best:    { label: '最高',    className: 'bg-amber-100 text-amber-700' },
+  best:    { label: 'かなりいい', className: 'bg-amber-100 text-amber-700' },
   good:    { label: 'いいな',  className: 'bg-amber-50 text-amber-600' },
   okay:    { label: 'ありかな', className: 'bg-stone-100 text-stone-500' },
   unknown: { label: '未確認',  className: 'bg-stone-50 text-stone-400' },
 }
 
 const SCORE_LABEL: Record<number, { label: string; className: string }> = {
-  3: { label: '最高',    className: 'bg-amber-500 text-white' },
+  3: { label: 'かなりいい', className: 'bg-amber-500 text-white' },
   2: { label: 'いいな',  className: 'bg-amber-100 text-amber-700' },
   1: { label: 'ありかな', className: 'bg-stone-100 text-stone-500' },
 }

@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 import type { PropertyLog } from '@/types'
 
-const SCORE_LABEL: Record<number, string> = { 3: '最高', 2: 'いいな', 1: 'ありかな' }
+const SCORE_LABEL: Record<number, string> = { 3: 'かなりいい', 2: 'いいな', 1: 'ありかな' }
 
 function formatLogs(logs: PropertyLog[], label: string): string {
   if (logs.length === 0) return `${label}のログはまだありません。`
@@ -74,7 +74,7 @@ ${partnerLogsText}
 ## 分析の視点（必ず守ること）
 1. 同じ物件名・または同系統の物件で評価が一致している場合 → 二人の共通の軸
 2. 評価が異なる物件 → 最も重要なズレのヒント。タグの差に注目する
-3. 片方だけ「最高」をつけた物件 → 何が響いて何が刺さらなかったかを比較する
+3. 片方だけ「かなりいい」をつけた物件 → 何が響いて何が刺さらなかったかを比較する
 4. 責めない・どちらが正しいという判断はしない。ズレを「対話のきっかけ」として提示する
 5. 条件は具体的に（「広さ」ではなく「リビングの開放感」のように）
 
@@ -94,7 +94,7 @@ ${partnerLogsText}
       "suggestion": "二人で話し合うと良いポイント（1文）"
     }
   ],
-  "insight": "二人の家探しの全体像を語りかけで2〜3文。前向きなトーンで。"
+  "insight": "二人の家探しの全体像を語りかけで4〜5文。共通点、ズレ、次に話すとよい論点まで前向きに伝える。"
 }`
 
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!)

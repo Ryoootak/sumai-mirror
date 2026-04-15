@@ -40,7 +40,7 @@ const PROPERTY_TYPE_OPTIONS: { value: PropertyType; label: string }[] = [
 ]
 
 const SCORE_OPTIONS = [
-  { value: 3, label: '最高',    sub: 'ぜひ検討したい', activeClass: 'border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-200' },
+  { value: 3, label: 'かなりいい', sub: 'かなり前向き', activeClass: 'border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-200' },
   { value: 2, label: 'いいな',  sub: 'いい感じ',       activeClass: 'border-amber-300 bg-amber-50 text-amber-700 shadow-sm' },
   { value: 1, label: 'ありかな', sub: '悪くない',      activeClass: 'border-stone-300 bg-stone-50 text-stone-600 shadow-sm' },
 ] as const

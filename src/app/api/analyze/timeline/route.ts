@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createClient } from '@/lib/supabase/server'
 import type { PropertyLog } from '@/types'
 
-const SCORE_LABEL: Record<number, string> = { 3: '最高', 2: 'いいな', 1: 'ありかな' }
+const SCORE_LABEL: Record<number, string> = { 3: 'かなりいい', 2: 'いいな', 1: 'ありかな' }
 
 function formatLogsChronological(logs: PropertyLog[]): string {
   return logs.map((l, i) => {
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
 ${logsText}
 
 ## 分析の視点（必ず守ること）
-1. 序盤（最初の3分の1）と終盤（最後の3分の1）で「最高」をつけた物件の共通点の変化 → 軸がどう定まってきたか
+1. 序盤（最初の3分の1）と終盤（最後の3分の1）で「かなりいい」をつけた物件の共通点の変化 → 軸がどう定まってきたか
 2. 序盤に多く選んでいたタグが終盤に消えている場合 → あきらめた条件か、重要でないと気づいた条件
 3. 終盤だけに現れるタグ → 探索を経て発見した新しい価値観
 4. メモの文体の変化（「迷ってます」「どうかな」→「やっぱり〇〇が大事」）も判断材料にする
@@ -86,7 +86,7 @@ ${logsText}
   ],
   "narrowed_down": ["絞られてきた条件1", "絞られてきた条件2", "絞られてきた条件3"],
   "still_open": ["まだ迷っている条件1", "まだ迷っている条件2"],
-  "insight": "家探しの旅の全体像を語りかけで2〜3文。成長や発見を肯定的に伝える。"
+  "insight": "家探しの旅の全体像を語りかけで4〜5文。変化、手放した条件、新しく見えてきた軸まで肯定的に伝える。"
 }`
 
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!)

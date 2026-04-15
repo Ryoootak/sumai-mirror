@@ -361,7 +361,7 @@ function Mirror1Card({
           <Card className="overflow-hidden border-amber-200 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
             <CardContent className="p-6 space-y-3">
               <InsightHeader icon={<Eye className="size-3.5" />} label="Your mirror" />
-              <p className="text-lg font-medium leading-relaxed text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
+              <p className="text-sm leading-7 text-stone-700 sm:text-[0.95rem]" style={{ fontFamily: 'var(--font-serif)' }}>
                 {result.insight}
               </p>
             </CardContent>
@@ -399,9 +399,9 @@ function Mirror1Card({
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Target className="size-4 text-amber-600" />
-                      「最高」に共通する条件
+                      「かなりいい」に共通する条件
                     </CardTitle>
-                    <CardDescription>評価「最高」の物件で繰り返し現れる要素です。</CardDescription>
+                    <CardDescription>評価「かなりいい」の物件で繰り返し現れる要素です。</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {tagFreq.map((item, i) => (
@@ -531,7 +531,7 @@ function Mirror2Card({
           <Card className="overflow-hidden border-amber-200 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
             <CardContent className="p-6 space-y-3">
               <InsightHeader icon={<Eye className="size-3.5" />} label="Pair insight" />
-              <p className="text-lg font-medium leading-relaxed text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
+              <p className="text-sm leading-7 text-stone-700 sm:text-[0.95rem]" style={{ fontFamily: 'var(--font-serif)' }}>
                 {result.insight}
               </p>
             </CardContent>
@@ -675,7 +675,7 @@ function Mirror3Card({
           <Card className="overflow-hidden border-amber-200 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)]">
             <CardContent className="p-6 space-y-3">
               <InsightHeader icon={<Eye className="size-3.5" />} label="Your journey" />
-              <p className="text-lg font-medium leading-relaxed text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
+              <p className="text-sm leading-7 text-stone-700 sm:text-[0.95rem]" style={{ fontFamily: 'var(--font-serif)' }}>
                 {result.insight}
               </p>
             </CardContent>

@@ -7,7 +7,7 @@ import type { PropertyLog, PropertyType } from '@/types'
 import { cn } from '@/lib/utils'
 
 const SCORE_LABEL: Record<number, { label: string; className: string }> = {
-  3: { label: '最高',    className: 'bg-amber-500 text-white' },
+  3: { label: 'かなりいい', className: 'bg-amber-500 text-white' },
   2: { label: 'いいな',  className: 'bg-amber-100 text-amber-700' },
   1: { label: 'ありかな', className: 'bg-stone-100 text-stone-500' },
 }

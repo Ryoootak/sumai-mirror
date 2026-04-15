@@ -7,13 +7,13 @@ import { cn } from '@/lib/utils'
 import type { PartnerReaction, PartnerReactionFormData } from '@/types'
 
 const SCORE_OPTIONS = [
-  { value: 3, label: '最高',    sub: 'ぜひ検討したい', activeClass: 'border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-200' },
+  { value: 3, label: 'かなりいい', sub: 'かなり前向き', activeClass: 'border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-200' },
   { value: 2, label: 'いいな',  sub: 'いい感じ',       activeClass: 'border-amber-300 bg-amber-50 text-amber-700 shadow-sm' },
   { value: 1, label: 'ありかな', sub: '悪くない',       activeClass: 'border-stone-300 bg-stone-50 text-stone-600 shadow-sm' },
 ] as const
 
 const REACTION_OPTIONS: { value: PartnerReaction; label: string; activeClass: string }[] = [
-  { value: 'best',    label: '最高',    activeClass: 'bg-amber-500 text-white border-amber-500' },
+  { value: 'best',    label: 'かなりいい', activeClass: 'bg-amber-500 text-white border-amber-500' },
   { value: 'good',    label: 'いいな',  activeClass: 'bg-amber-300 text-amber-900 border-amber-300' },
   { value: 'okay',    label: 'ありかな', activeClass: 'bg-stone-200 text-stone-700 border-stone-300' },
   { value: 'unknown', label: 'まだ',    activeClass: 'bg-stone-100 text-stone-400 border-stone-200' },
