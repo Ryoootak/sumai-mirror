@@ -16,8 +16,17 @@ export function DeleteAccountButton() {
     setError(null)
 
     try {
+      const supabaseClient = createClient()
+      const { data: { session } } = await supabaseClient.auth.getSession()
+      if (!session) {
+        setError('セッションが見つかりません。再ログインしてください。')
+        setLoading(false)
+        return
+      }
+
       const response = await fetch('/api/account/delete', {
         method: 'DELETE',
+        headers: { Authorization: `Bearer ${session.access_token}` },
       })
 
       const result = await response.json().catch(() => ({})) as { error?: string }
@@ -28,8 +37,7 @@ export function DeleteAccountButton() {
         return
       }
 
-      const supabase = createClient()
-      await supabase.auth.signOut()
+      await supabaseClient.auth.signOut()
 
       router.push('/login')
       router.refresh()
