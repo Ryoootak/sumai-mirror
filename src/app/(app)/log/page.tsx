@@ -28,19 +28,18 @@ export default async function LogPage() {
 
   const { data: logsRaw } = await supabase
     .from('property_logs')
-    .select('*, users_profile(name)')
+    .select('*')
     .eq('project_id', projectId)
     .order('created_at', { ascending: false })
 
-  type LogWithProfile = PropertyLog & { users_profile: { name: string | null } | null }
-  const logs = (logsRaw ?? []) as LogWithProfile[]
+  const logs = (logsRaw ?? []) as PropertyLog[]
   const avgScore = logs.length
     ? Math.round((logs.reduce((s, l) => s + l.score, 0) / logs.length) * 10) / 10
     : null
   const highScoreCount = logs.filter((log) => log.score === 3).length
 
   // 種別グループ
-  const byType: Record<string, LogWithProfile[]> = {
+  const byType: Record<string, PropertyLog[]> = {
     mansion: logs.filter((l) => l.property_type === 'mansion'),
     house:   logs.filter((l) => l.property_type === 'house'),
     land:    logs.filter((l) => l.property_type === 'land'),
