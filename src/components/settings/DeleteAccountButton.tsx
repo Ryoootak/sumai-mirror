@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
 import { deleteAccount } from '@/app/(app)/settings/actions'
 
 export function DeleteAccountButton() {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -15,14 +17,16 @@ export function DeleteAccountButton() {
 
     try {
       const result = await deleteAccount()
-      // redirect() が Server Action 内で呼ばれた場合 result は undefined になる
       if (result?.error) {
         setError(result.error)
-        setLoading(false)
+        return
       }
-      // 成功時は Server Action 内の redirect('/login') が画面遷移を行う
+      // 削除成功 — クライアント側でログインページへ遷移
+      router.push('/login')
+      router.refresh()
     } catch {
       setError('削除に失敗しました')
+    } finally {
       setLoading(false)
     }
   }
