@@ -39,7 +39,7 @@ export default async function LogPage() {
   const highScoreCount = logs.filter((log) => log.score === 3).length
 
   // 種別グループ
-  const byType: Record<string, PropertyLog[]> = {
+  const byType: Record<string, LogWithProfile[]> = {
     mansion: logs.filter((l) => l.property_type === 'mansion'),
     house:   logs.filter((l) => l.property_type === 'house'),
     land:    logs.filter((l) => l.property_type === 'land'),

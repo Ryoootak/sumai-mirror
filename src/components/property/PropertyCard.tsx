@@ -3,15 +3,8 @@
 import Link from 'next/link'
 import { ChevronRight, ExternalLink } from 'lucide-react'
 
-import type { PartnerReaction, PropertyLog, PropertyType } from '@/types'
+import type { PropertyLog, PropertyType } from '@/types'
 import { cn } from '@/lib/utils'
-
-const PARTNER_LABEL: Record<PartnerReaction, { label: string; className: string }> = {
-  best:    { label: '最高',    className: 'bg-amber-100 text-amber-700' },
-  good:    { label: 'いいな',  className: 'bg-amber-50 text-amber-600' },
-  okay:    { label: 'ありかな', className: 'bg-stone-100 text-stone-500' },
-  unknown: { label: '未確認',  className: 'bg-stone-50 text-stone-300' },
-}
 
 const SCORE_LABEL: Record<number, { label: string; className: string }> = {
   3: { label: '最高',    className: 'bg-amber-500 text-white' },
