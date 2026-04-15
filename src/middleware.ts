@@ -29,19 +29,21 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const { pathname } = request.nextUrl
+  const matchesRoute = (route: string) =>
+    pathname === route || pathname.startsWith(`${route}/`)
 
   // Auth routes → ログイン済みならアプリへ
-  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/signup')
+  const isAuthRoute = matchesRoute('/login') || matchesRoute('/signup')
   if (isAuthRoute && user) {
     return NextResponse.redirect(new URL('/log', request.url))
   }
 
   // App routes → 未ログインならログインへ
   const isAppRoute =
-    pathname.startsWith('/log') ||
-    pathname.startsWith('/mirror') ||
-    pathname.startsWith('/pair') ||
-    pathname.startsWith('/settings')
+    matchesRoute('/log') ||
+    matchesRoute('/mirror') ||
+    matchesRoute('/pair') ||
+    matchesRoute('/settings')
   if (isAppRoute && !user) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('next', sanitizeAuthRedirectPath(pathname))
