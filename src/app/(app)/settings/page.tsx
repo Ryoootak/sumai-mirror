@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { LogOut, Settings2 } from 'lucide-react'
 import { PreferencesForm } from '@/components/settings/PreferencesForm'
+import { ProfileForm } from '@/components/settings/ProfileForm'
 import { DeleteAccountButton } from '@/components/settings/DeleteAccountButton'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -46,17 +47,13 @@ export default async function SettingsPage() {
 
       <main className="px-5 space-y-6">
         {/* Profile */}
-        <section className="rounded-3xl bg-white border border-stone-100 shadow-sm p-5">
-          <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">アカウント</p>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-lg font-bold text-amber-600">
-              {profile?.name?.slice(0, 1) ?? user.email?.slice(0, 1) ?? '?'}
-            </div>
-            <div>
-              <p className="font-semibold text-stone-800">{profile?.name ?? '名前未設定'}</p>
-              <p className="text-sm text-stone-400">{user.email}</p>
-            </div>
-          </div>
+        <section className="rounded-3xl bg-white border border-stone-100 shadow-sm p-5 space-y-4">
+          <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider">アカウント</p>
+          <ProfileForm
+            userId={user.id}
+            initialName={profile?.name ?? ''}
+            currentEmail={user.email ?? ''}
+          />
         </section>
 
         {/* Preferences */}
