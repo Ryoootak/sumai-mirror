@@ -77,6 +77,7 @@ interface Props {
   latestPriorityAnalysis: AnalysisRecord | null
   latestAlignmentAnalysis: AnalysisRecord | null
   latestTimelineAnalysis: AnalysisRecord | null
+  isSolo?: boolean
 }
 
 // ── Helpers ─────────────────────────────────────────────────
@@ -673,6 +674,7 @@ export function PriorityMirror({
   latestPriorityAnalysis,
   latestAlignmentAnalysis,
   latestTimelineAnalysis,
+  isSolo = false,
 }: Props) {
   if (logs.length === 0) {
     return (
@@ -706,12 +708,14 @@ export function PriorityMirror({
         logs={logs}
         latestAnalysis={latestPriorityAnalysis}
       />
-      <Mirror2Card
-        projectId={projectId}
-        userId={userId}
-        partnerId={partnerId}
-        latestAnalysis={latestAlignmentAnalysis}
-      />
+      {!isSolo && (
+        <Mirror2Card
+          projectId={projectId}
+          userId={userId}
+          partnerId={partnerId}
+          latestAnalysis={latestAlignmentAnalysis}
+        />
+      )}
       <Mirror3Card
         projectId={projectId}
         userId={userId}
