@@ -24,7 +24,7 @@ export default async function MirrorPage() {
   ] = await Promise.all([
     supabase
       .from('property_logs')
-      .select('id, score, tags_good, tags_bad')
+      .select('id, score, tags_good, tags_bad, created_at')
       .eq('project_id', projectId)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false }),
@@ -41,7 +41,8 @@ export default async function MirrorPage() {
       .order('created_at', { ascending: false })
   ])
 
-  const logs = (logsRaw ?? []) as Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad'>[]
+  const logs = (logsRaw ?? []) as Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad' | 'created_at'>[]
+  const logDayCount = new Set(logs.map(l => l.created_at.slice(0, 10))).size
   const partnerId = members?.find((member) => member.user_id !== user.id)?.user_id ?? null
   const analyses = (analysesRaw ?? []) as Analysis[]
   const latestPriority = analyses.find((analysis) => analysis.type === 'priority') ?? null
@@ -78,6 +79,7 @@ export default async function MirrorPage() {
       <main className="px-5">
         <PriorityMirror
           logs={logs}
+          logDayCount={logDayCount}
           projectId={projectId}
           userId={user.id}
           partnerId={partnerId}
