@@ -183,7 +183,7 @@ export default async function LogPage() {
                   <span className="text-xs text-stone-400">{byType.other.length}件</span>
                 </div>
                 <div className="space-y-2">
-                  {byType.other.map((log) => <PropertyCard key={log.id} log={log} creatorName={log.users_profile?.name ?? null} currentUserId={user.id} />)}
+                  {byType.other.map((log) => <PropertyCard key={log.id} log={log} currentUserId={user.id} />)}
                 </div>
               </section>
             )}
@@ -196,7 +196,7 @@ export default async function LogPage() {
                   <p className="mt-0.5 text-xs text-stone-400">パートナーがまだスコアを入力していない物件です</p>
                 </div>
                 <div className="mt-3 space-y-2">
-                  {awaitingPartner.map((log) => <PropertyCard key={log.id} log={log} creatorName={log.users_profile?.name ?? null} currentUserId={user.id} />)}
+                  {awaitingPartner.map((log) => <PropertyCard key={log.id} log={log} currentUserId={user.id} />)}
                 </div>
               </section>
             )}
