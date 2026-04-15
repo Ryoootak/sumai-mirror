@@ -1,130 +1,103 @@
-import Link from 'next/link'
-import { ChevronRight, ExternalLink, House, MessageSquareText } from 'lucide-react'
+'use client'
 
-import type { PartnerReaction, PropertyLog } from '@/types'
+import Link from 'next/link'
+import { ChevronRight, ExternalLink } from 'lucide-react'
+
+import type { PartnerReaction, PropertyLog, PropertyType } from '@/types'
 import { cn } from '@/lib/utils'
-import { Card, CardContent } from '@/components/ui/card'
 
 const PARTNER_LABEL: Record<PartnerReaction, { label: string; className: string }> = {
-  great:   { label: '◎', className: 'bg-emerald-100 text-emerald-700' },
-  good:    { label: '○', className: 'bg-sky-100 text-sky-700' },
-  neutral: { label: '△', className: 'bg-amber-100 text-amber-700' },
-  bad:     { label: '×', className: 'bg-rose-100 text-rose-700' },
-  unknown: { label: '―', className: 'bg-stone-100 text-stone-400' },
+  best:    { label: '最高',    className: 'bg-amber-100 text-amber-700' },
+  good:    { label: 'いいな',  className: 'bg-amber-50 text-amber-600' },
+  okay:    { label: 'ありかな', className: 'bg-stone-100 text-stone-500' },
+  unknown: { label: '未確認',  className: 'bg-stone-50 text-stone-300' },
 }
 
-function Stars({ score }: { score: number }) {
-  return (
-    <div className="flex gap-0.5" aria-label={`スコア ${score}点`}>
-      {[1, 2, 3, 4, 5].map((s) => (
-        <span
-          key={s}
-          className={cn('text-lg leading-none', s <= score ? 'text-amber-400' : 'text-stone-200')}
-        >
-          ★
-        </span>
-      ))}
-    </div>
-  )
+const SCORE_LABEL: Record<number, { label: string; className: string }> = {
+  3: { label: '最高',    className: 'bg-amber-500 text-white' },
+  2: { label: 'いいな',  className: 'bg-amber-100 text-amber-700' },
+  1: { label: 'ありかな', className: 'bg-stone-100 text-stone-500' },
+}
+
+const TYPE_LABEL: Record<PropertyType, { label: string; className: string }> = {
+  mansion: { label: 'マンション', className: 'bg-amber-100 text-amber-700' },
+  house:   { label: '戸建て',     className: 'bg-emerald-100 text-emerald-700' },
+  land:    { label: '土地',       className: 'bg-sky-100 text-sky-700' },
 }
 
 interface PropertyCardProps {
   log: PropertyLog
+  creatorName?: string | null
+  currentUserId?: string
 }
 
-export function PropertyCard({ log }: PropertyCardProps) {
-  const partner = PARTNER_LABEL[log.partner_reaction]
+export function PropertyCard({ log, creatorName, currentUserId }: PropertyCardProps) {
+  const isMyLog = currentUserId ? log.user_id === currentUserId : false
+  const score = SCORE_LABEL[log.score] ?? SCORE_LABEL[1]
+  const typeInfo = log.property_type ? TYPE_LABEL[log.property_type] : null
   const dateStr = new Date(log.created_at).toLocaleDateString('ja-JP', {
-    month: 'short',
+    month: 'numeric',
     day: 'numeric',
   })
+  const shownTags = log.tags_good.slice(0, 2)
+  const extraCount = log.tags_good.length - shownTags.length
 
   return (
     <Link href={`/log/${log.id}`} className="group block">
-      <Card className="overflow-hidden transition-all duration-200 group-hover:border-amber-200 group-hover:shadow-md">
-        <CardContent className="space-y-4 p-5">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-stone-50 px-2.5 py-1 text-[11px] font-medium text-stone-500">
-                <House className="size-3.5" strokeWidth={1.6} />
-                {dateStr}
-              </div>
-              <p className="truncate text-[15px] font-semibold text-stone-900">
-                {log.title ?? '名称未設定の物件'}
-              </p>
-              <p className="mt-1 text-sm text-stone-500">{log.price ?? '価格未登録'}</p>
-            </div>
-            <div className="flex shrink-0 items-center gap-2">
-              <span className={cn('flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold', partner.className)}>
-                {partner.label}
-              </span>
-              {log.url && (
-                <a
-                  href={log.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="rounded-full p-2 text-stone-300 transition hover:bg-stone-50 hover:text-amber-500"
-                  aria-label="物件サイトを開く"
+      <div className="rounded-2xl border border-stone-100 bg-white px-4 py-3.5 shadow-sm transition-all duration-150 group-hover:border-amber-200 group-hover:shadow-md">
+        {/* Row 1: type badge + title + score + chevron */}
+        <div className="flex items-center gap-2">
+          {typeInfo && (
+            <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold', typeInfo.className)}>
+              {typeInfo.label}
+            </span>
+          )}
+          <p className="min-w-0 flex-1 truncate text-[14px] font-semibold text-stone-900">
+            {log.title ?? '名称未設定の物件'}
+          </p>
+          <span className={cn('shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold', score.className)}>
+            {score.label}
+          </span>
+          <ChevronRight className="size-4 shrink-0 text-stone-300 transition group-hover:text-stone-500" />
+        </div>
+
+        {/* Row 2: price · date + tags + creator */}
+        <div className="mt-1.5 flex items-center gap-2">
+          <p className="shrink-0 text-[12px] text-stone-400">
+            {log.price ? log.price : '価格未登録'} · {dateStr}
+          </p>
+          {shownTags.length > 0 && (
+            <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
+              {shownTags.map((tag) => (
+                <span
+                  key={tag}
+                  className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700"
                 >
-                  <ExternalLink className="size-4" strokeWidth={1.5} />
-                </a>
+                  {tag}
+                </span>
+              ))}
+              {extraCount > 0 && (
+                <span className="shrink-0 text-[10px] text-stone-400">+{extraCount}</span>
               )}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="font-brand text-[11px] font-medium uppercase tracking-[0.14em] text-stone-400">Overall score</p>
-              <div className="mt-1">
-                <Stars score={log.score} />
-              </div>
-            </div>
-            <div className="rounded-2xl bg-amber-50 px-3 py-2 text-right">
-              <p className="font-brand text-[11px] font-medium uppercase tracking-[0.12em] text-amber-700/70">Score</p>
-              <p className="text-lg font-semibold text-amber-700">{log.score}.0</p>
-            </div>
-          </div>
-
-          {(log.tags_good.length > 0 || log.tags_bad.length > 0) && (
-            <div className="flex flex-wrap gap-2">
-              {log.tags_good.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800"
-                >
-                  {tag}
-                </span>
-              ))}
-              {log.tags_bad.slice(0, 2).map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-medium text-rose-700"
-                >
-                  {tag}
-                </span>
-              ))}
             </div>
           )}
-
-          <div className="flex items-end justify-between gap-3 border-t border-stone-100 pt-3">
-            <div className="min-w-0 flex-1">
-              {log.memo ? (
-                <div className="flex items-center gap-2 text-sm text-stone-500">
-                  <MessageSquareText className="size-3.5 shrink-0 text-stone-400" strokeWidth={1.6} />
-                  <p className="line-clamp-1">{log.memo}</p>
-                </div>
-              ) : (
-                <p className="text-sm text-stone-400">メモなし</p>
-              )}
-            </div>
-            <div className="flex items-center gap-1 text-sm font-medium text-stone-400 transition group-hover:text-stone-700">
-              詳細
-              <ChevronRight className="size-4" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          {!isMyLog && creatorName && (
+            <span className="ml-auto shrink-0 text-[10px] text-stone-400">{creatorName}が登録</span>
+          )}
+          {log.url && (
+            <a
+              href={log.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="ml-auto shrink-0 text-stone-300 transition hover:text-amber-500"
+              aria-label="物件サイトを開く"
+            >
+              <ExternalLink className="size-3.5" strokeWidth={1.5} />
+            </a>
+          )}
+        </div>
+      </div>
     </Link>
   )
 }

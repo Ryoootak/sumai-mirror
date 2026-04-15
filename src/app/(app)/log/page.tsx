@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Building2, Plus, Sparkles, TrendingUp } from 'lucide-react'
 import { redirect } from 'next/navigation'
@@ -8,6 +9,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { getOrCreateProject } from '@/lib/project'
 import { createClient } from '@/lib/supabase/server'
 import type { PropertyLog } from '@/types'
+
+const TYPE_SECTIONS = [
+  { key: 'mansion', label: 'マンション', badgeClass: 'bg-amber-100 text-amber-700' },
+  { key: 'house',   label: '戸建て',     badgeClass: 'bg-emerald-100 text-emerald-700' },
+  { key: 'land',    label: '土地',       badgeClass: 'bg-sky-100 text-sky-700' },
+] as const
 
 export default async function LogPage() {
   const supabase = createClient()
@@ -20,20 +27,40 @@ export default async function LogPage() {
 
   const { data: logsRaw } = await supabase
     .from('property_logs')
-    .select('*')
+    .select('*, users_profile(name)')
     .eq('project_id', projectId)
     .order('created_at', { ascending: false })
 
-  const logs = (logsRaw ?? []) as PropertyLog[]
+  type LogWithProfile = PropertyLog & { users_profile: { name: string | null } | null }
+  const logs = (logsRaw ?? []) as LogWithProfile[]
   const avgScore = logs.length
     ? Math.round((logs.reduce((s, l) => s + l.score, 0) / logs.length) * 10) / 10
     : null
-  const highScoreCount = logs.filter((log) => log.score >= 4).length
+  const highScoreCount = logs.filter((log) => log.score === 3).length
+
+  // 種別グループ
+  const byType: Record<string, PropertyLog[]> = {
+    mansion: logs.filter((l) => l.property_type === 'mansion'),
+    house:   logs.filter((l) => l.property_type === 'house'),
+    land:    logs.filter((l) => l.property_type === 'land'),
+    other:   logs.filter((l) => !l.property_type),
+  }
+  // 自分のログのうち、パートナーがまだスコアを入力していないもの
+  const awaitingPartner = logs.filter((l) => l.user_id === user.id && l.partner_score === null)
 
   return (
     <div className="pb-30">
       <header className="px-5 pb-6 pt-10">
-        <div className="rounded-[1.75rem] border border-stone-200/80 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)] p-6 shadow-sm">
+        <div className="relative overflow-hidden rounded-[1.75rem] border border-stone-200/80 bg-[linear-gradient(180deg,#fffdfb_0%,#fff7ef_100%)] p-6 shadow-sm">
+          {/* 装飾画像 */}
+          <Image
+            src="/images/home_sun.png"
+            alt=""
+            width={110}
+            height={110}
+            className="absolute -right-2 -bottom-2 opacity-80 select-none pointer-events-none drop-shadow-sm"
+            priority
+          />
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-3">
               <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
@@ -47,7 +74,7 @@ export default async function LogPage() {
                 >
                   物件ログ
                 </h1>
-                <p className="mt-2 max-w-sm text-sm leading-7 text-stone-500">
+                <p className="mt-2 max-w-[200px] text-sm leading-7 text-stone-500">
                   気になった物件を静かに積み上げて、二人の判断材料を整えていきます。
                 </p>
               </div>
@@ -104,7 +131,7 @@ export default async function LogPage() {
         </div>
       )}
 
-      <main className="space-y-4 px-5">
+      <main className="px-5 space-y-8">
         {logs.length === 0 ? (
           <Card className="overflow-hidden border-stone-200/70">
             <CardHeader className="space-y-3">
@@ -137,7 +164,50 @@ export default async function LogPage() {
             </CardContent>
           </Card>
         ) : (
-          logs.map((log) => <PropertyCard key={log.id} log={log} />)
+          <>
+            {/* 種別グループ */}
+            {TYPE_SECTIONS.map(({ key, label, badgeClass }) => {
+              const group = byType[key]
+              if (!group || group.length === 0) return null
+              return (
+                <section key={key}>
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeClass}`}>{label}</span>
+                    <span className="text-xs text-stone-400">{group.length}件</span>
+                  </div>
+                  <div className="space-y-2">
+                    {group.map((log) => <PropertyCard key={log.id} log={log} creatorName={log.users_profile?.name ?? null} currentUserId={user.id} />)}
+                  </div>
+                </section>
+              )
+            })}
+
+            {/* 種別未設定（既存ログ） */}
+            {byType.other.length > 0 && (
+              <section>
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-500">未分類</span>
+                  <span className="text-xs text-stone-400">{byType.other.length}件</span>
+                </div>
+                <div className="space-y-2">
+                  {byType.other.map((log) => <PropertyCard key={log.id} log={log} creatorName={log.users_profile?.name ?? null} currentUserId={user.id} />)}
+                </div>
+              </section>
+            )}
+
+            {/* パートナーに確認してもらおう */}
+            {awaitingPartner.length > 0 && (
+              <section>
+                <div className="mb-1 border-t border-stone-100 pt-6">
+                  <p className="text-[13px] font-semibold text-stone-700">パートナーに確認してもらおう</p>
+                  <p className="mt-0.5 text-xs text-stone-400">パートナーがまだスコアを入力していない物件です</p>
+                </div>
+                <div className="mt-3 space-y-2">
+                  {awaitingPartner.map((log) => <PropertyCard key={log.id} log={log} creatorName={log.users_profile?.name ?? null} currentUserId={user.id} />)}
+                </div>
+              </section>
+            )}
+          </>
         )}
 
         {logs.length > 0 && logs.length < 5 && (
