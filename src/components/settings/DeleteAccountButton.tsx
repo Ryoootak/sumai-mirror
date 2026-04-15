@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { deleteAccount } from '@/app/(app)/settings/actions'
 
 export function DeleteAccountButton() {
   const [open, setOpen] = useState(false)
@@ -14,14 +13,15 @@ export function DeleteAccountButton() {
     setError(null)
 
     try {
-      const result = await deleteAccount()
-      if (result?.error) {
-        setError(result.error)
+      const res = await fetch('/api/account/delete', { method: 'DELETE' })
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        setError(data.error ?? '削除に失敗しました')
         return
       }
-      // フルリダイレクト（Next.js のアクションレスポンス転送を回避）
+
       window.location.href = '/login'
-      return
     } catch {
       setError('削除に失敗しました')
     } finally {
