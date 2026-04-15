@@ -21,6 +21,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, projectId: currentActiveProjectId, mode })
   }
 
-  const projectId = await createProjectForUser(supabase, user.id, 'owner')
+  const projectId = await createProjectForUser(supabase, user.id, 'owner', mode)
   return NextResponse.json({ ok: true, projectId, mode })
 }
