@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
   // Auth routes → ログイン済みならアプリへ
   const isAuthRoute = matchesRoute('/login') || matchesRoute('/signup')
   if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/log', request.url))
   }
 
   if (isOnboardingRoute && !user) {
