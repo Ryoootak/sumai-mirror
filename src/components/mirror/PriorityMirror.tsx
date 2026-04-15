@@ -71,6 +71,7 @@ interface TimelineResult {
 
 interface Props {
   logs: MirrorLog[]
+  logDayCount: number
   projectId: string
   userId: string
   partnerId: string | null
@@ -523,12 +524,12 @@ function Mirror2Card({
 function Mirror3Card({
   projectId,
   userId,
-  logCount,
+  logDayCount,
   latestAnalysis,
 }: {
   projectId: string
   userId: string
-  logCount: number
+  logDayCount: number
   latestAnalysis: AnalysisRecord | null
 }) {
   const [loading, setLoading] = useState(false)
@@ -556,7 +557,7 @@ function Mirror3Card({
     }
   }
 
-  if (logCount < 5) {
+  if (logDayCount < 5) {
     return (
       <Card className="overflow-hidden border-amber-100 bg-amber-50/40">
         <CardContent className="p-5">
@@ -565,7 +566,7 @@ function Mirror3Card({
             <span className="text-sm font-semibold text-stone-700">鏡3 — 変化の鏡</span>
           </div>
           <p className="text-sm text-stone-500">
-            あと<span className="font-bold text-amber-600">{5 - logCount}件</span>記録すると解放されます
+            あと<span className="font-bold text-amber-600">{5 - logDayCount}日分</span>記録すると解放されます
           </p>
         </CardContent>
       </Card>
@@ -668,6 +669,7 @@ function Mirror3Card({
 
 export function PriorityMirror({
   logs,
+  logDayCount,
   projectId,
   userId,
   partnerId,
@@ -719,7 +721,7 @@ export function PriorityMirror({
       <Mirror3Card
         projectId={projectId}
         userId={userId}
-        logCount={logs.length}
+        logDayCount={logDayCount}
         latestAnalysis={latestTimelineAnalysis}
       />
     </div>
