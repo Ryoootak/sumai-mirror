@@ -64,7 +64,7 @@ export default async function OnboardingPage() {
               <div>
                 <h2 className="text-sm font-semibold text-stone-800">ひとりで始める</h2>
                 <p className="mt-1 text-sm leading-6 text-stone-500">
-                  まずは自分だけで記録を始めて、あとからペアに合流できます。
+                  一人暮らし・単身向けの物件を、自分のペースで記録・分析します。
                 </p>
               </div>
             </div>
