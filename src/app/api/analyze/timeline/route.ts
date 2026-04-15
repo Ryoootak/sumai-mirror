@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
     .order('created_at', { ascending: true })
   const logs = (logsRaw ?? []) as PropertyLog[]
 
-  if (logs.length < 10) {
-    return NextResponse.json({ error: 'ログが10件以上必要です' }, { status: 422 })
+  if (logs.length < 5) {
+    return NextResponse.json({ error: 'ログが5件以上必要です' }, { status: 422 })
   }
 
   const logsText = formatLogsChronological(logs)
