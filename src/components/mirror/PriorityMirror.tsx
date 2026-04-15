@@ -586,7 +586,7 @@ function Mirror3Card({
         <Card className="border-amber-200 bg-[linear-gradient(180deg,#fffaf5_0%,#fff_100%)]">
           <CardContent className="p-6 space-y-4">
             <p className="text-sm leading-7 text-stone-600">
-              {logCount}件のログを時系列で分析して、<span className="font-semibold text-amber-700">好みの変化と絞り込み</span>を整理します。
+              {logDayCount}日分のログを時系列で分析して、<span className="font-semibold text-amber-700">好みの変化と絞り込み</span>を整理します。
             </p>
             <Button onClick={run} disabled={loading} className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
               {loading ? <><RefreshCw className="size-4 animate-spin" />分析中</> : <><History className="size-4" />変化を振り返る</>}
