@@ -87,7 +87,10 @@ export default async function SettingsPage() {
             <LogOut className="size-4" strokeWidth={1.5} />
             <span className="font-medium">ログアウト</span>
           </Link>
-          <DeleteAccountButton deleteToken={generateDeleteToken(user.id)} />
+          <DeleteAccountButton
+            deleteToken={generateDeleteToken(user.id)}
+            email={user.email ?? ''}
+          />
         </section>
       </main>
     </div>
