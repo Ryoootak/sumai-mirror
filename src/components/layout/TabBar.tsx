@@ -5,15 +5,16 @@ import { usePathname } from 'next/navigation'
 import { Home, Sparkles, Users, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const TABS = [
-  { href: '/log',      label: 'ログ',  Icon: Home },
-  { href: '/mirror',   label: '鏡',    Icon: Sparkles },
-  { href: '/pair',     label: 'ペア',  Icon: Users },
-  { href: '/settings', label: '設定',  Icon: Settings },
+const ALL_TABS = [
+  { href: '/log',      label: 'ログ',  Icon: Home,     pairOnly: false },
+  { href: '/mirror',   label: '鏡',    Icon: Sparkles, pairOnly: false },
+  { href: '/pair',     label: 'ペア',  Icon: Users,    pairOnly: true  },
+  { href: '/settings', label: '設定',  Icon: Settings, pairOnly: false },
 ] as const
 
-export function TabBar() {
+export function TabBar({ isSolo = false }: { isSolo?: boolean }) {
   const pathname = usePathname()
+  const tabs = isSolo ? ALL_TABS.filter(t => !t.pairOnly) : ALL_TABS
 
   return (
     <nav
@@ -21,7 +22,7 @@ export function TabBar() {
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
       <div className="mx-auto flex max-w-md items-center justify-around px-3 py-3">
-        {TABS.map(({ href, label, Icon }) => {
+        {tabs.map(({ href, label, Icon }) => {
           const active = pathname === href || pathname.startsWith(href + '/')
           return (
             <Link
