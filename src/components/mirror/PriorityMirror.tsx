@@ -556,7 +556,7 @@ function Mirror3Card({
     }
   }
 
-  if (logCount < 10) {
+  if (logCount < 5) {
     return (
       <Card className="overflow-hidden border-amber-100 bg-amber-50/40">
         <CardContent className="p-5">
@@ -565,7 +565,7 @@ function Mirror3Card({
             <span className="text-sm font-semibold text-stone-700">鏡3 — 変化の鏡</span>
           </div>
           <p className="text-sm text-stone-500">
-            あと<span className="font-bold text-amber-600">{10 - logCount}件</span>記録すると解放されます
+            あと<span className="font-bold text-amber-600">{5 - logCount}件</span>記録すると解放されます
           </p>
         </CardContent>
       </Card>
