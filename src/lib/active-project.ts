@@ -60,16 +60,29 @@ export async function setActiveProjectId(
   }
 }
 
+export async function getProjectMode(
+  supabase: SupabaseClient,
+  projectId: string
+): Promise<'solo' | 'pair'> {
+  const { data } = await supabase
+    .from('projects')
+    .select('mode')
+    .eq('id', projectId)
+    .single()
+  return ((data as { mode?: string } | null)?.mode ?? 'pair') as 'solo' | 'pair'
+}
+
 export async function createProjectForUser(
   supabase: SupabaseClient,
   userId: string,
-  role: 'owner' | 'partner' = 'owner'
+  role: 'owner' | 'partner' = 'owner',
+  mode: 'solo' | 'pair' = 'pair'
 ) {
   const projectId = crypto.randomUUID()
 
   const { error: projectError } = await supabase
     .from('projects')
-    .insert({ id: projectId, name: '家探し', status: 'active' })
+    .insert({ id: projectId, name: '家探し', status: 'active', mode })
 
   if (projectError) {
     throw new Error(`プロジェクトの作成に失敗しました: ${projectError.message}`)
