@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { LogOut, Settings2 } from 'lucide-react'
 import { PreferencesForm } from '@/components/settings/PreferencesForm'
+import { DeleteAccountButton } from '@/components/settings/DeleteAccountButton'
 import { Card, CardContent } from '@/components/ui/card'
 
 export default async function SettingsPage() {
@@ -67,8 +68,8 @@ export default async function SettingsPage() {
           />
         </section>
 
-        {/* Logout */}
-        <section className="rounded-3xl bg-white border border-stone-100 shadow-sm overflow-hidden">
+        {/* Logout / Delete */}
+        <section className="rounded-3xl bg-white border border-stone-100 shadow-sm overflow-hidden divide-y divide-stone-100">
           <Link
             href="/api/auth/signout"
             className="flex items-center gap-3 px-5 py-4 text-rose-500 hover:bg-rose-50 transition"
@@ -76,6 +77,7 @@ export default async function SettingsPage() {
             <LogOut className="size-4" strokeWidth={1.5} />
             <span className="font-medium">ログアウト</span>
           </Link>
+          <DeleteAccountButton />
         </section>
       </main>
     </div>
