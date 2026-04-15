@@ -26,7 +26,6 @@ export default async function MirrorPage() {
       .from('property_logs')
       .select('id, score, tags_good, tags_bad, created_at')
       .eq('project_id', projectId)
-      .eq('user_id', user.id)
       .order('created_at', { ascending: false }),
     supabase
       .from('project_members')
