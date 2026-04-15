@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import {
-  ensureProjectMembership,
   getActiveProjectId,
   getProjectCounts,
   setActiveProjectId,
@@ -24,6 +24,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '招待リンクが不正です' }, { status: 400 })
     }
 
+    // メンバーシップ挿入はRLSをバイパスするためadminクライアントを使用
+    const admin = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    )
+
     const currentActiveProjectId = await getActiveProjectId(supabase, user.id)
 
     const { data: memberships, error: membershipError } = await supabase
@@ -35,13 +41,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: membershipError.message }, { status: 400 })
     }
 
-    if (memberships?.some((membership) => membership.project_id === projectId)) {
+    if (memberships?.some((m) => m.project_id === projectId)) {
       await setActiveProjectId(supabase, user.id, projectId)
       return NextResponse.json({ ok: true, alreadyJoined: true })
     }
 
     if (!currentActiveProjectId || currentActiveProjectId === projectId) {
-      await ensureProjectMembership(supabase, user.id, projectId, 'partner')
+      const { error } = await admin
+        .from('project_members')
+        .insert({ project_id: projectId, user_id: user.id, role: 'partner' })
+      if (error && error.code !== '23505') {
+        return NextResponse.json({ error: error.message }, { status: 400 })
+      }
       await setActiveProjectId(supabase, user.id, projectId)
       return NextResponse.json({ ok: true })
     }
@@ -85,10 +96,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    await ensureProjectMembership(supabase, user.id, projectId, 'partner')
-    await setActiveProjectId(supabase, user.id, projectId)
+    const { error: insertError } = await admin
+      .from('project_members')
+      .insert({ project_id: projectId, user_id: user.id, role: 'partner' })
+    if (insertError && insertError.code !== '23505') {
+      return NextResponse.json({ error: insertError.message }, { status: 400 })
+    }
 
+    await setActiveProjectId(supabase, user.id, projectId)
     return NextResponse.json({ ok: true })
+
   } catch (err) {
     console.error('[invite/accept] unexpected error:', err)
     return NextResponse.json(
