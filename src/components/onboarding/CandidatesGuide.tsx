@@ -75,16 +75,16 @@ export function CandidatesGuide({ logCount }: { logCount: number }) {
           <>
             <div className="space-y-2">
               <h2 className="text-lg font-semibold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
-                1件入ったので、もう鏡が使えます
+                1件入ったので、もう分析が使えます
               </h2>
               <p className="text-sm leading-7 text-stone-600">
-                鏡では、今ある候補の見え方をすぐ確認できます。候補が5件たまるとAIによる好みの分析も始まります。
+                分析では、今ある候補の見え方をすぐ確認できます。候補が5件たまるとAIによる好みの分析も始まります。
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/mirror" onClick={close}>
                 <Button className="h-11 rounded-2xl bg-[#3c3128] px-5 text-white shadow-sm hover:bg-[#2f2620]">
-                  鏡を開く
+                  分析を開く
                   <ArrowRight className="size-4" />
                 </Button>
               </Link>

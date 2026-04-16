@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 
 const ALL_TABS = [
   { href: '/log',      label: '候補',  Icon: Home,     pairOnly: false },
-  { href: '/mirror',   label: '鏡',    Icon: Sparkles, pairOnly: false },
+  { href: '/mirror',   label: '分析',  Icon: Sparkles, pairOnly: false },
   { href: '/pair',     label: 'ペア',  Icon: Users,    pairOnly: true  },
   { href: '/settings', label: '設定',  Icon: Settings, pairOnly: false },
 ] as const

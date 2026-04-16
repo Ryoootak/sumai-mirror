@@ -24,7 +24,7 @@ export default async function MirrorPage() {
   ] = await Promise.all([
     supabase
       .from('property_logs')
-      .select('id, score, tags_good, tags_bad, created_at')
+      .select('id, score, tags_good, tags_bad, memo, created_at')
       .eq('project_id', projectId)
       .order('created_at', { ascending: false }),
     supabase
@@ -40,8 +40,9 @@ export default async function MirrorPage() {
       .order('created_at', { ascending: false })
   ])
 
-  const logs = (logsRaw ?? []) as Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad' | 'created_at'>[]
+  const logs = (logsRaw ?? []) as Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad' | 'memo' | 'created_at'>[]
   const logDayCount = new Set(logs.map(l => l.created_at.slice(0, 10))).size
+  const memoCount = logs.filter(l => l.memo).length
   const partnerId = members?.find((member) => member.user_id !== user.id)?.user_id ?? null
   const analyses = (analysesRaw ?? []) as Analysis[]
   const latestPriority = analyses.find((analysis) => analysis.type === 'priority') ?? null
@@ -62,15 +63,15 @@ export default async function MirrorPage() {
             />
             <div className="font-brand inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 shadow-sm">
               <Sparkles className="size-3.5 text-amber-500" />
-              Mirror analysis
+              Preference analysis
             </div>
             <h1
               className="mt-4 text-[2rem] font-bold text-stone-800"
               style={{ fontFamily: 'var(--font-serif)' }}
             >
-              鏡
+              好みの分析
             </h1>
-            <p className="mt-2 max-w-[240px] text-sm leading-7 text-stone-500">物件候補から、重視している条件や二人の違いを整理できます。</p>
+            <p className="mt-2 max-w-[240px] text-sm leading-7 text-stone-500">物件候補から、重視している条件や好みの変化を整理できます。</p>
           </CardContent>
         </Card>
       </header>
@@ -79,6 +80,7 @@ export default async function MirrorPage() {
         <PriorityMirror
           logs={logs}
           logDayCount={logDayCount}
+          memoCount={memoCount}
           projectId={projectId}
           userId={user.id}
           partnerId={partnerId}

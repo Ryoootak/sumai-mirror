@@ -16,7 +16,7 @@ import type { PropertyLog } from '@/types'
 
 // ── Types ──────────────────────────────────────────────────
 
-type MirrorLog = Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad'>
+type MirrorLog = Pick<PropertyLog, 'id' | 'score' | 'tags_good' | 'tags_bad' | 'memo'>
 
 interface AnalysisRecord {
   id: string
@@ -72,6 +72,7 @@ interface TimelineResult {
 interface Props {
   logs: MirrorLog[]
   logDayCount: number
+  memoCount: number
   projectId: string
   userId: string
   partnerId: string | null
@@ -108,7 +109,7 @@ function computeBadFrequency(logs: MirrorLog[]): { tag: string; count: number }[
 
 function MirrorIllustration() {
   return (
-    <svg viewBox="0 0 360 240" className="h-auto w-full" role="img" aria-label="価値観の鏡のイラスト">
+    <svg viewBox="0 0 360 240" className="h-auto w-full" role="img" aria-label="好みの分析のイラスト">
       <rect x="28" y="26" width="304" height="188" rx="28" fill="#FFF7ED" />
       <rect x="78" y="54" width="92" height="124" rx="44" fill="#F5D8AD" />
       <rect x="92" y="68" width="64" height="96" rx="32" fill="#FFFFFF" />
@@ -181,18 +182,20 @@ function FeedbackBar({
   )
 }
 
-// ── 鏡1: 優先度の鏡 ────────────────────────────────────────
+// ── 物件選びの傾向 ─────────────────────────────────────────
 
 function Mirror1Card({
   projectId,
   userId,
   logCount,
+  memoCount,
   logs,
   latestAnalysis,
 }: {
   projectId: string
   userId: string
   logCount: number
+  memoCount: number
   logs: MirrorLog[]
   latestAnalysis: AnalysisRecord | null
 }) {
@@ -230,7 +233,7 @@ function Mirror1Card({
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="size-4 text-amber-400" strokeWidth={1.5} />
-            <span className="text-sm font-semibold text-stone-700">鏡1 — 候補の見え方</span>
+            <span className="text-sm font-semibold text-stone-700">物件選びの傾向</span>
           </div>
           <p className="text-sm text-stone-500">
             候補を1件追加すると、よく見ている条件の並び方を確認できます。
@@ -246,7 +249,7 @@ function Mirror1Card({
         <div className="flex items-center gap-2">
           <Sparkles className="size-4 text-amber-500" strokeWidth={1.5} />
           <h2 className="text-base font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
-            鏡1 — 候補の見え方
+            物件選びの傾向
           </h2>
         </div>
 
@@ -321,7 +324,7 @@ function Mirror1Card({
       <div className="flex items-center gap-2">
         <Sparkles className="size-4 text-amber-500" strokeWidth={1.5} />
         <h2 className="text-base font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
-          鏡1 — 好みの分析
+          物件選びの傾向
         </h2>
         <Dialog>
           <DialogTrigger asChild>
@@ -329,7 +332,7 @@ function Mirror1Card({
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>鏡1とは</DialogTitle>
+              <DialogTitle>物件選びの傾向とは</DialogTitle>
               <DialogDescription>
                 候補の評価とタグから、重視している条件を整理します。5件以上たまるとAIが要約します。
               </DialogDescription>
@@ -347,6 +350,11 @@ function Mirror1Card({
                   {logCount}件の候補から、
                   <span className="font-semibold text-amber-700">重視している条件</span>をAIが読み解きます。
                 </p>
+                {memoCount < logCount && (
+                  <p className="text-xs text-stone-400">
+                    メモあり {memoCount}/{logCount}件。メモが増えるほど分析が深くなります。
+                  </p>
+                )}
                 <Button onClick={run} disabled={loading} className="h-11 rounded-xl bg-amber-500 px-5 text-white hover:bg-amber-600">
                   {loading ? <><RefreshCw className="size-4 animate-spin" />分析中</> : <><Sparkles className="size-4" />AIで整理する</>}
                 </Button>
@@ -453,7 +461,7 @@ function Mirror1Card({
   )
 }
 
-// ── 鏡2: ズレの鏡 ──────────────────────────────────────────
+// ── パートナーとのすり合わせ ───────────────────────────────
 
 function Mirror2Card({
   projectId,
@@ -497,7 +505,7 @@ function Mirror2Card({
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-2">
             <GitCompare className="size-4 text-stone-400" strokeWidth={1.5} />
-            <span className="text-sm font-semibold text-stone-500">鏡2 — ズレの鏡</span>
+            <span className="text-sm font-semibold text-stone-500">パートナーとのすり合わせ</span>
           </div>
           <p className="text-sm text-stone-400">ペア設定後に解放されます</p>
         </CardContent>
@@ -510,7 +518,7 @@ function Mirror2Card({
       <div className="flex items-center gap-2">
         <GitCompare className="size-4 text-amber-500" strokeWidth={1.5} />
         <h2 className="text-base font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
-          鏡2 — ズレの鏡
+          パートナーとのすり合わせ
         </h2>
       </div>
 
@@ -595,7 +603,7 @@ function Mirror2Card({
   )
 }
 
-// ── 鏡3: 変化の鏡 ──────────────────────────────────────────
+// ── 好みの変遷 ────────────────────────────────────────────
 
 function Mirror3Card({
   projectId,
@@ -639,7 +647,7 @@ function Mirror3Card({
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-2">
             <History className="size-4 text-amber-400" strokeWidth={1.5} />
-            <span className="text-sm font-semibold text-stone-700">鏡3 — 変化の鏡</span>
+            <span className="text-sm font-semibold text-stone-700">好みの変遷</span>
           </div>
           <p className="text-sm text-stone-500">
             あと<span className="font-bold text-amber-600">{5 - logDayCount}日分</span>候補を見ていくと解放されます
@@ -654,7 +662,7 @@ function Mirror3Card({
       <div className="flex items-center gap-2">
         <History className="size-4 text-amber-500" strokeWidth={1.5} />
         <h2 className="text-base font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
-          鏡3 — 変化の鏡
+          好みの変遷
         </h2>
       </div>
 
@@ -746,6 +754,7 @@ function Mirror3Card({
 export function PriorityMirror({
   logs,
   logDayCount,
+  memoCount,
   projectId,
   userId,
   partnerId,
@@ -761,13 +770,13 @@ export function PriorityMirror({
           <div>
             <div className="font-brand inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-700">
               <Sparkles className="size-3.5" />
-              Mirror waiting
+              Preference analysis
             </div>
             <h3 className="mt-4 text-xl font-bold text-stone-800" style={{ fontFamily: 'var(--font-serif)' }}>
-              鏡はまだ眠っています
+              まだ分析できるデータがありません
             </h3>
             <p className="mt-3 text-sm leading-7 text-stone-500">
-              物件候補を1件追加すると、まずは候補の見え方を確認できます。5件たまるとAI分析も使えます。
+              物件候補を1件追加すると、よく見ている条件の確認ができます。5件たまるとAI分析も使えます。
             </p>
           </div>
           <MirrorIllustration />
@@ -778,11 +787,12 @@ export function PriorityMirror({
 
   return (
     <div className="space-y-6">
-      {/* 3つの鏡 */}
+      {/* 3つの分析 */}
       <Mirror1Card
         projectId={projectId}
         userId={userId}
         logCount={logs.length}
+        memoCount={memoCount}
         logs={logs}
         latestAnalysis={latestPriorityAnalysis}
       />

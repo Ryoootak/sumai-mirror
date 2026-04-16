@@ -115,11 +115,11 @@ export default async function LogPage() {
               <Sparkles className="size-5 shrink-0" strokeWidth={1.7} />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-stone-800">鏡 | 好みの分析</p>
+              <p className="text-sm font-semibold text-stone-800">好みの分析</p>
               <p className="text-xs text-stone-500">
                 {logs.length >= 5
-                  ? '候補から、重視している条件や二人の違いを整理できます'
-                  : `候補の見え方は今すぐ確認できます。あと${5 - logs.length}件でAI分析も使えます`}
+                  ? '候補から、重視している条件や好みの変化を整理できます'
+                  : `物件選びの傾向は今すぐ確認できます。あと${5 - logs.length}件でAI分析も使えます`}
               </p>
             </div>
             <div className="font-brand flex items-center gap-2 rounded-full bg-[#3c3128] px-3 py-1.5 text-xs font-medium text-white">
