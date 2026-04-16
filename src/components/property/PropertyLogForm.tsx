@@ -431,14 +431,15 @@ export function PropertyLogForm({ projectId, initialData, mode = 'create' }: Pro
 
       {/* Memo */}
       <section className="space-y-2">
-        <label className="block text-sm font-semibold text-stone-700">
-          一言メモ <span className="font-normal text-stone-400">（任意）</span>
-        </label>
+        <div>
+          <label className="block text-sm font-semibold text-stone-700">メモ</label>
+          <p className="text-xs text-amber-700 mt-0.5">一言あると、分析の精度がぐっと上がります</p>
+        </div>
         <textarea
           value={form.memo}
           onChange={(e) => set('memo', e.target.value)}
           rows={3}
-          placeholder="内覧の感想、気になったこと、担当者の印象など..."
+          placeholder="現地の雰囲気、決め手になりそうな点、引っかかった点など。短くてもOK"
           className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-stone-800 placeholder:text-stone-300 outline-none transition resize-none focus:border-amber-400 focus:ring-3 focus:ring-amber-400/20"
         />
       </section>
