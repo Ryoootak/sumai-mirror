@@ -1,4 +1,16 @@
 {
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(mkdir -p /Users/ryota.k/Documents/Dev/sumai-mirror/supabase/migrations)",
@@ -17,7 +29,8 @@
       "Bash(curl -s -o /dev/null -w \"/dashboard → %{http_code}\\\\n\" http://localhost:3000/dashboard)"
     ],
     "additionalDirectories": [
-      "/Users/ryota.k/Documents/Dev/sumai-mirror/src/app/(app)/log"
+      "/Users/ryota.k/Documents/Dev/sumai-mirror/src/app/(app)/log",
+      "/Users/ryota.k/Documents/Dev/sumai-mirror"
     ]
   }
 }
